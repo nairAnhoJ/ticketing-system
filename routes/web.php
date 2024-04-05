@@ -98,22 +98,18 @@ Route::get('/dashboard', function () {
         ->orderBy('tickets.id', 'desc')
         ->limit(7)
         ->get();
-
+        
         $userID = Auth::user()->id;
 
         $ticketReq = Ticket::where('assigned_to', $userID)
             ->whereIn('status', ['PENDING', 'ONGOING'])
             ->count();
             
-        $pending = Ticket::where('assigned_to', $userID)
-            ->where('department', $userDeptID)
-            ->where('status', 'PENDING')
-            ->count();
+        $pending = Ticket::where('status', 'PENDING')->count();
             
-        $ongoing = Ticket::where('assigned_to', $userID)
-            ->where('department', $userDeptID)
-            ->where('status', 'ONGOING')
-            ->count();
+        $ongoing = Ticket::where('status', 'ONGOING')->count();
+
+        dd($ongoing);
     }
 
     return view('dashboard', compact('userDept', 'tickets', 'deptInCharge', 'userDeptID', 'ticketReq', 'pending', 'ongoing', 'newTickets'));
