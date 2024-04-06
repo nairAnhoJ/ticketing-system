@@ -108,8 +108,6 @@ Route::get('/dashboard', function () {
         $pending = Ticket::where('status', 'PENDING')->count();
             
         $ongoing = Ticket::where('status', 'ONGOING')->count();
-
-        dd($ongoing);
     }
 
     return view('dashboard', compact('userDept', 'tickets', 'deptInCharge', 'userDeptID', 'ticketReq', 'pending', 'ongoing', 'newTickets'));
