@@ -268,9 +268,9 @@
                         <th scope="col" class="sticky top-0 max-w-xs py-2 text-center">
                             SUBJECT
                         </th>
-                        <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
+                        {{-- <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
                             ASSIGNED TO
-                        </th>
+                        </th> --}}
                     </tr>
                 </thead>
                 <tbody id="ticketTableBody" style="max-height: calc(100% - 126px);">
@@ -314,9 +314,9 @@
                             <td class="max-w-xs px-6 py-3 overflow-hidden font-medium text-center whitespace-nowrap">
                                 {{ $ticket->subject }}
                             </td>
-                            <td class="px-6 py-3 font-medium text-center whitespace-nowrap">
+                            {{-- <td class="px-6 py-3 font-medium text-center whitespace-nowrap">
                                 {{ $ticket->assigned['name'] }}
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
                     @if ($tickets->count() == 7)
