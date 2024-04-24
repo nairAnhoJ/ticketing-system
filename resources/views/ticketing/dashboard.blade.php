@@ -125,9 +125,9 @@
                             <div id="ticketUpdate"></div>
                         @endif
 
-                        @if (auth()->user()->dept_id != $deptInCharge)
+                        {{-- @if (auth()->user()->dept_id != $deptInCharge) --}}
                             <div id="ticketUpdateDiv"></div>
-                        @endif
+                        {{-- @endif --}}
 
                         <div id="ticketResolutionDiv"></div>
                     </div>
@@ -540,6 +540,7 @@
                 $('#ticketStatus2').removeClass('text-teal-500');
                 $('#ticketStatus2').addClass('text-red-500');
                 $('#ticketStatus2').removeClass('text-neutral-300');
+                $('#ticketUpdateDiv').addClass('hidden');
             }else if(status == 'ONGOING'){
                 if($('#ticketButton').length){
                     $('#ticketButton').removeClass('hidden');
@@ -556,15 +557,16 @@
                 $('#updateButtonDiv').html(`<button id="updateButton" type="button" data-modal-toggle="ticketModal" type="button" class="focus:outline-none text-neutral-800 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-yellow-500 bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-900">Update Ticket</button>`);
                 $('#cancelButtonDiv').html(`<button id="cancelButton" type="button" data-modal-toggle="ticketModal" type="button"               class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-red-600 bg-red-600 hover:bg-red-700 focus:ring-red-900">Cancel Ticket</button>`);
                 $('#ticketUpdateInput').html(`<hr class="my-5">
-                                                <label for="ticketUpdate" class="block mb-2 text-sm font-medium text-white">Update</label>
-                                                <textarea style="resize: none;" id="ticketUpdate" name="ticketUpdate" rows=4 cols=50 maxlength=1000 class="block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">${update}</textarea>`);
+                                                <label for="ticketUpdate" class="block mb-2 text-base font-medium text-white">Update</label>
+                                                <textarea style="resize: none;" id="ticketUpdate" name="ticketUpdate" rows=4 cols=50 maxlength=1000 class="taAutoHeight block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">${update}</textarea>`);
                 $('#ticketResolutionInput').html(`
-                                                <label for="ticketResolution" class="block mt-5 mb-2 text-sm font-medium text-white">Resolution</label>
-                                                <textarea required style="resize: none;" id="ticketResolution" name="ticketResolution" rows=4 cols=50 maxlength=1000 class="block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"></textarea>`);
+                                                <label for="ticketResolution" class="block mt-5 mb-2 text-base font-medium text-white">Resolution <span class="text-red-500 text-sm">*Required upon completion</span></label>
+                                                <textarea required style="resize: none;" id="ticketResolution" name="ticketResolution" rows=4 cols=50 maxlength=1000 class="taAutoHeight block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"></textarea>`);
                 $('#ticketStatus2').removeClass('text-red-500');
                 $('#ticketStatus2').removeClass('text-teal-500');
                 $('#ticketStatus2').addClass('text-amber-300');
                 $('#ticketStatus2').removeClass('text-neutral-300');
+                $('#ticketUpdateDiv').addClass('hidden');
             }else if(status == 'DONE'){
                 var reso = $(this).find("span").data('reso');
                 if($('#ticketButton').length){
@@ -578,16 +580,17 @@
                     $('#ticketUpdateDiv').html('');
                 }else{
                     $('#ticketUpdateDiv').html(`<hr class="my-5">
-                                                <label for="ticketResolution" class="block text-base font-medium text-white">Update</label>
-                                                <textarea disabled style="resize: none;" cols=50 maxlength=1000 class="block p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
+                                                <label for="doneTicketUpdate" class="block text-base font-medium text-white">Update</label>
+                                                <textarea disabled style="max-height: 150px; resize: none;" id="doneTicketUpdate" class="taAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">${update}</textarea>`);
                 }
                 $('#ticketResolutionDiv').html(`<hr class="my-5">
                                                 <label for="ticketResolution" class="block mb-2 text-base font-medium text-white">Resolution</label>
-                                                <textarea disabled style="max-height: 250px; resize: none;" id="ticketResolution" class="w-full text-base leading-relaxed text-gray-300 bg-gray-700">${reso}</textarea>`);
+                                                <textarea disabled style="max-height: 150px; resize: none;" id="ticketResolution" class="taAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">${reso}</textarea>`);
                 $('#ticketStatus2').removeClass('text-red-500');
                 $('#ticketStatus2').removeClass('text-amber-300');
                 $('#ticketStatus2').addClass('text-teal-500');
                 $('#ticketStatus2').removeClass('text-neutral-300');
+                $('#ticketUpdateDiv').removeClass('hidden');
             }else if(status == 'CANCELLED'){
                 if($('#ticketButton').length){
                     $('#ticketButton').addClass('hidden');
@@ -600,14 +603,15 @@
                     $('#ticketUpdateDiv').html('');
                 }else{
                     $('#ticketUpdateDiv').html(`<hr class="my-5">
-                                                <label for="ticketResolution" class="block text-base font-medium text-white">Update</label>
-                                                <textarea disabled style="resize: none;" cols=50 maxlength=1000 class="block p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
+                                                <label for="doneTicketUpdate" class="block text-base font-medium text-white">Update</label>
+                                                <textarea disabled style="resize: none;" cols=50 maxlength=1000 id="ticketResolution" class="block p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
                 }
                 $('#ticketResolutionDiv').html('');
                 $('#ticketStatus2').removeClass('text-red-500');
                 $('#ticketStatus2').removeClass('text-amber-300');
                 $('#ticketStatus2').removeClass('text-teal-500');
                 $('#ticketStatus2').addClass('text-neutral-300');
+                $('#ticketUpdateDiv').removeClass('hidden');
             }
             
             var is_SAP = $(this).find("span").data('is_sap');
@@ -622,7 +626,7 @@
             $('meta[http-equiv="refresh"]').attr('content', '');
             $('#viewTicket').click();
 
-            var ticketResolution = $('#ticketResolution');
+            var ticketResolution = $('.taAutoHeight');
             ticketResolution.css('height', 'auto');
             ticketResolution.css('height', ticketResolution.prop('scrollHeight') + 'px');
         });

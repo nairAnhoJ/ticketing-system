@@ -40,8 +40,9 @@ class TicketController extends Controller
                 ->get();
         }else{
             $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
-            ->whereIn('status', ['PENDING', 'ONGOING'])
-            ->orderBy('tickets.id', 'desc')
+            ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
+            // ->orderBy('id', 'desc')
+            ->orderBy('status', 'desc')
             ->limit(50)
             ->get();
         }
