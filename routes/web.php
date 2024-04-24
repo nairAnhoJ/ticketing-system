@@ -76,6 +76,7 @@ Route::get('/dashboard', function () {
             ->limit(7)
             ->get();
 
+
         $userID = Auth::user()->id;
 
         $ticketReq = Ticket::where('user_id', $userID)

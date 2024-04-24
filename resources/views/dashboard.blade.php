@@ -277,7 +277,7 @@
                     @foreach ($tickets as $ticket)
                         <tr class="ticketsRows border-b border-gray-700 cursor-pointer {{ (strtotime($ticket->created_at) > strtotime("-1 day")) ? 'bg-emerald-500 hover:bg-emerald-600 opacity-80 text-black' : 'bg-gray-800 hover:bg-gray-700' }}">
                             <th scope="row" class="px-6 py-3 text-center">
-                                <span data-id="{{ $ticket->id }}" data-ticket_no="{{ $ticket->ticket_no }}" data-user="{{ $ticket->user }}" data-dept="{{ $ticket->dept }}" data-date="{{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}" data-subject="{{ $ticket->subject }}" data-desc="{{ $ticket->description }}" data-status="{{ $ticket->status }}" data-src="{{ $ticket->attachment }}" data-reso="{{ $ticket->resolution }}">
+                                <span data-id="{{ $ticket->id }}" data-ticket_no="{{ $ticket->ticket_no }}" data-user="{{ $ticket->requestor->name }}" data-dept="{{ $ticket->departmentRow->name }}" data-date="{{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}" data-subject="{{ $ticket->subject }}" data-desc="{{ $ticket->description }}" data-status="{{ $ticket->status }}" data-src="{{ $ticket->attachment }}" data-reso="{{ $ticket->resolution }}">
                                     {{ $ticket->ticket_no }}
                                 </span>
                             </th>
