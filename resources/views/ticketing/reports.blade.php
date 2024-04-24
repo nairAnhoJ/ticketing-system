@@ -145,6 +145,7 @@
                             <button id="AttachedFileButton" data-modal-toggle="AttachedFileModal" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View Attached File</button>
                             <button id="SAPButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View SAP Business Partner</button>
                         </div>
+                        <div id="ticketUpdate"></div>
                         {{-- @if (auth()->user()->dept_id == $deptInCharge)
                             <div id="ticketUpdateInput"></div>
                             <div id="ticketResolutionInput"></div>
@@ -477,7 +478,7 @@
                   @foreach ($tickets as $ticket)
                       <tr class="bg-gray-800 border-gray-700 cursor-pointer hover:bg-gray-700">
                           <th scope="row" class="px-6 py-3 font-medium text-center text-white">
-                              <span data-id="{{ $ticket->id }}" data-ticket_no="{{ $ticket->ticket_no }}" data-is_SAP="{{ $ticket->is_SAP }}" data-user="{{ $ticket->user }}" data-dept="{{ $ticket->dept }}" data-date="{{ date("M d, Y", strtotime($ticket->created_at)) }}" data-subject="{{ $ticket->subject }}" data-desc="{{ $ticket->description }}" data-status="{{ $ticket->status }}" data-src="{{ $ticket->attachment }}" data-reso="{{ $ticket->resolution }}">
+                              <span data-id="{{ $ticket->id }}" data-ticket_no="{{ $ticket->ticket_no }}" data-is_SAP="{{ $ticket->is_SAP }}" data-user="{{ $ticket->user }}" data-dept="{{ $ticket->dept }}" data-date="{{ date("M d, Y", strtotime($ticket->created_at)) }}" data-subject="{{ $ticket->subject }}" data-desc="{{ $ticket->description }}" data-status="{{ $ticket->status }}" data-src="{{ $ticket->attachment }}" data-reso="{{ $ticket->resolution }}" data-update="{{ $ticket->update }}">
                                   {{ $ticket->ticket_no }}
                               </span>
                           </th>
@@ -606,11 +607,11 @@
                         $('#ticketButton').html('Mark as DONE');
                     }
                     if(update == ''){
-                        $('#ticketUpdateDiv').html('');
+                        $('#ticketUpdate').html('');
                     }else{
-                        $('#ticketUpdateDiv').html(`<hr class="my-5">
+                        $('#ticketUpdate').html(`<hr class="my-5">
                                                     <label for="ticketResolution" class="block text-base font-medium text-white">Update</label>
-                                                    <textarea disabled style="resize: none;" rows=10 cols=50 maxlength=1000 class="block p-2.5 w-full max-h- text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
+                                                    <textarea disabled style="max-height: 150px; resize: none;" cols=50 maxlength=1000 class="taAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">${update}</textarea>`);
                     }
                     $('#ticketResolutionDiv').html('');
                     $('#updateButtonDiv').html(`<button id="updateButton" type="button" data-modal-toggle="ticketModal" type="button" class="focus:outline-none text-neutral-800 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-yellow-500 bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-900">Update Ticket</button>`);
@@ -635,15 +636,15 @@
                     $('#updateButtonDiv').html('');
                     $('#cancelButtonDiv').html('');
                     if(update == ''){
-                        $('#ticketUpdateDiv').html('');
+                        $('#ticketUpdate').html('');
                     }else{
-                        $('#ticketUpdateDiv').html(`<hr class="my-5">
+                        $('#ticketUpdate').html(`<hr class="my-5">
                                                     <label for="ticketResolution" class="block text-base font-medium text-white">Update</label>
-                                                    <textarea disabled style="resize: none;" cols=50 maxlength=1000 class="block p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
+                                                    <textarea disabled style="max-height: 150px; resize: none;" cols=50 maxlength=1000 class="taAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">${update}</textarea>`);
                     }
                     $('#ticketResolutionDiv').html(`<hr class="my-5">
                                                     <label for="ticketResolution" class="block mb-2 text-base font-medium text-white">Resolution</label>
-                                                    <textarea disabled style="max-height: 250px; resize: none;" id="ticketResolution" class="w-full text-base leading-relaxed text-gray-300 bg-gray-700">${reso}</textarea>`);
+                                                    <textarea disabled style="max-height: 150px; resize: none;" id="ticketResolution" class="w-full text-base leading-relaxed text-gray-300 bg-gray-700">${reso}</textarea>`);
                     $('#ticketStatus2').removeClass('text-red-500');
                     $('#ticketStatus2').removeClass('text-amber-300');
                     $('#ticketStatus2').addClass('text-teal-500');
@@ -682,7 +683,7 @@
                 $('meta[http-equiv="refresh"]').attr('content', '');
                 $('#viewTicket').click();
 
-                var ticketResolution = $('#ticketResolution');
+                var ticketResolution = $('.taAutoHeight');
                 ticketResolution.css('height', 'auto');
                 ticketResolution.css('height', ticketResolution.prop('scrollHeight') + 'px');
             });

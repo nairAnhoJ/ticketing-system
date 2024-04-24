@@ -118,23 +118,24 @@
                             <button id="AttachedFileButton" data-modal-toggle="AttachedFileModal" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View Attached File</button>
                             <button id="SAPButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View SAP Business Partner</button>
                         </div>
+                        <div id="ticketUpdateInput"></div>
                         @if (auth()->user()->dept_id == $deptInCharge)
-                            <div id="ticketUpdateInput"></div>
                             <div id="ticketResolutionInput"></div>
-                        @else
-                            <div id="ticketUpdate"></div>
+                        {{-- @else --}}
                         @endif
+                            {{-- <div id="ticketUpdate"></div>
+                        @endif --}}
 
                         {{-- @if (auth()->user()->dept_id != $deptInCharge) --}}
-                            <div id="ticketUpdateDiv"></div>
+                            {{-- <div id="ticketUpdateDiv"></div> --}}
                         {{-- @endif --}}
 
                         <div id="ticketResolutionDiv"></div>
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-3 border-t border-gray-600 rounded-b">
+                        <div id="updateButtonDiv"></div>
                         @if (auth()->user()->dept_id == $deptInCharge)
-                            <div id="updateButtonDiv"></div>
                             <button data-modal-toggle="ticketModal" type="submit" id="ticketButton" class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 mr-3 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"></button>
                         @endif
                         <div id="cancelButtonDiv"></div>
@@ -566,7 +567,7 @@
                 $('#ticketStatus2').removeClass('text-teal-500');
                 $('#ticketStatus2').addClass('text-amber-300');
                 $('#ticketStatus2').removeClass('text-neutral-300');
-                $('#ticketUpdateDiv').addClass('hidden');
+                $('#ticketUpdateDiv').removeClass('hidden');
             }else if(status == 'DONE'){
                 var reso = $(this).find("span").data('reso');
                 if($('#ticketButton').length){

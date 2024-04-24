@@ -40,8 +40,8 @@ class TicketController extends Controller
                 ->get();
         }else{
             $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
-            ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
-            // ->orderBy('id', 'desc')
+            ->whereIn('status', ['PENDING', 'ONGOING'])
+            ->orderBy('id', 'desc')
             ->orderBy('status', 'desc')
             ->limit(50)
             ->get();
@@ -401,7 +401,8 @@ class TicketController extends Controller
                 'tickets.is_SAP',
                 'tickets.created_at',
                 'tickets.attachment',
-                'tickets.resolution'
+                'tickets.resolution',
+                'tickets.update'
             )
             ->join('users AS u', 'tickets.user_id', '=', 'u.id')
             ->join('departments', 'tickets.department', '=', 'departments.id')
@@ -472,7 +473,8 @@ class TicketController extends Controller
                 'tickets.is_SAP',
                 'tickets.created_at',
                 'tickets.attachment',
-                'tickets.resolution'
+                'tickets.resolution',
+                'tickets.update'
             )
             ->join('users AS u', 'tickets.user_id', '=', 'u.id')
             ->join('departments', 'tickets.department', '=', 'departments.id')
