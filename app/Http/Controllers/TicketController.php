@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -242,7 +243,7 @@ class TicketController extends Controller
     public function update(Request $request){
         $id = $request->ticketID;
         $status = $request->ticketStatus;
-        $ticketUpdate = $request->ticketUpdate;
+        $ticketUpdate = date('F j, Y h:i A') . ' - ' . Auth::user()->name . "\n" . $request->ticketUpdate . "\n";
         $deptInCharge = (DB::table('dept_in_charges')->where('id', 1)->first())->dept_id;
         
         $smtp = DB::table('settings')->where('id', 1)->first();
@@ -308,7 +309,15 @@ class TicketController extends Controller
                 DB::update('update tickets set assigned_to = ?, status = "CANCELLED" where id = ?', [auth()->user()->id, $id]);
                 return redirect()->route('ticket.index');
             }else if($request->isUpdate == '1'){
-                DB::update('update tickets set tickets.update = ? where id = ?', [$ticketUpdate, $id]);
+                $ticket = Ticket::where('id', $id)->first();
+                if($ticket->update != null){
+                    $ticket_update = $ticket->update;
+                    $ticket->update = $ticket_update . "\n" . $ticketUpdate;
+                }else{
+                    $ticket->update = $ticketUpdate;
+                }
+                $ticket->save();
+                // DB::update('update tickets set tickets.update = ? where id = ?', [$ticketUpdate, $id]);
                 return redirect()->route('ticket.index');
             }else{
                 $request->validate([

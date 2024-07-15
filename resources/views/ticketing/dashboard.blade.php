@@ -119,6 +119,10 @@
                             <button id="SAPButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View SAP Business Partner</button>
                         </div>
                         <div id="ticketUpdateInput"></div>
+                        <div class="flex gap-x-3">
+                            <input type="text" id="inputeTicketUpdate" name="ticketUpdate" class="w-full first-letter:block p-2.5 text-sm rounded-lg bg-gray-700 border border-gray-300 placeholder-gray-400 text-white" placeholder="Update here..." autocomplete="off">
+                            <div id="updateButtonDiv" class=" whitespace-nowrap"></div>
+                        </div>
                         @if (auth()->user()->dept_id == $deptInCharge)
                             <div id="ticketResolutionInput"></div>
                         {{-- @else --}}
@@ -402,53 +406,53 @@
                     </tr>
                 </thead>
                 <tbody id="ticketTableBody" style="max-height: calc(100% - 126px);">
-                @foreach ($tickets as $ticket)
-                    <tr class="bg-gray-800 border-gray-700 hover:bg-gray-700 cursor-pointer {{ (strtotime($ticket->created_at) > strtotime("-1 day")) ? 'text-green-500' : '' }}">
-                        <th scope="row" class="px-6 py-3 font-medium text-center text-white">
-                            <span data-id="{{ $ticket->id }}" data-ticket_no="{{ $ticket->ticket_no }}" data-is_SAP="{{ $ticket->is_SAP }}" data-user="{{ $ticket->requestor->name }}" data-dept="{{ $ticket->departmentRow->name }}" data-date="{{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}" data-subject="{{ $ticket->subject }}" data-desc="{{ $ticket->description }}" data-status="{{ $ticket->status }}" data-src="{{ $ticket->attachment }}" data-reso="{{ $ticket->resolution }}" data-update="{{ $ticket->update }}">
-                                {{ $ticket->ticket_no }}
-                            </span>
-                        </th>
-                        <td class="px-6 py-3 text-center whitespace-nowrap">
-                            {{ $ticket->requestor['name'] }}
-                        </td>
-                        <td class="px-6 py-3 text-center whitespace-nowrap">
-                            {{ $ticket->departmentRow['name'] }}
-                        </td>
-                        <td class="px-6 py-3 text-center whitespace-nowrap">
-                            {{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}
-                        </td>
-                        <td class="px-6 py-3 text-center whitespace-nowrap">
-                            <span class="
-                                @php
-                                    $status = $ticket->status;
-                                    if($status == 'PENDING'){
-                                        echo 'text-red-500';
-                                    }elseif($status == 'ONGOING'){
-                                        echo 'text-amber-300';
-                                    }elseif($status == 'DONE'){
-                                        echo 'text-teal-500';
-                                    }elseif($status == 'CANCELLED'){
-                                        echo 'text-neutral-300';
-                                    }
-                                @endphp
-                            ">
-                                @php
-                                    echo $status;
-                                @endphp
-                            </span>
-                        </td>
-                        <td class="px-6 py-3 text-center whitespace-nowrap">
-                            {{ $ticket->category['name'] }}
-                        </td>
-                        <td class="max-w-xs px-6 py-3 overflow-hidden text-center whitespace-nowrap">
-                            {{ $ticket->subject }}
-                        </td>
-                        {{-- <td class="px-6 py-3 text-center whitespace-nowrap">
-                            {{ $ticket->assigned['name'] }}
-                        </td> --}}
-                    </tr>
-                @endforeach
+                    @foreach ($tickets as $ticket)
+                        <tr class="bg-gray-800 border-gray-700 hover:bg-gray-700 cursor-pointer {{ (strtotime($ticket->created_at) > strtotime("-1 day")) ? 'text-green-500' : '' }}">
+                            <th scope="row" class="px-6 py-3 font-medium text-center text-white">
+                                <span data-id="{{ $ticket->id }}" data-ticket_no="{{ $ticket->ticket_no }}" data-is_SAP="{{ $ticket->is_SAP }}" data-user="{{ $ticket->requestor->name }}" data-dept="{{ $ticket->departmentRow->name }}" data-date="{{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}" data-subject="{{ $ticket->subject }}" data-desc="{{ $ticket->description }}" data-status="{{ $ticket->status }}" data-src="{{ $ticket->attachment }}" data-reso="{{ $ticket->resolution }}" data-update="{{ $ticket->update }}">
+                                    {{ $ticket->ticket_no }}
+                                </span>
+                            </th>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ $ticket->requestor['name'] }}
+                            </td>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ $ticket->departmentRow['name'] }}
+                            </td>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}
+                            </td>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                <span class="
+                                    @php
+                                        $status = $ticket->status;
+                                        if($status == 'PENDING'){
+                                            echo 'text-red-500';
+                                        }elseif($status == 'ONGOING'){
+                                            echo 'text-amber-300';
+                                        }elseif($status == 'DONE'){
+                                            echo 'text-teal-500';
+                                        }elseif($status == 'CANCELLED'){
+                                            echo 'text-neutral-300';
+                                        }
+                                    @endphp
+                                ">
+                                    @php
+                                        echo $status;
+                                    @endphp
+                                </span>
+                            </td>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ $ticket->category['name'] }}
+                            </td>
+                            <td class="max-w-xs px-6 py-3 overflow-hidden text-center whitespace-nowrap">
+                                {{ $ticket->subject }}
+                            </td>
+                            {{-- <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ $ticket->assigned['name'] }}
+                            </td> --}}
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -531,6 +535,7 @@
                     $('#ticketButton').removeClass('hidden');
                     $('#ticketButton').html('Mark as ONGOING');
                 }
+                $('#inputeTicketUpdate').addClass('hidden');
                 $('#updateButtonDiv').html('');
                 $('#cancelButtonDiv').html(`<button id="cancelButton" type="button" data-modal-toggle="ticketModal" type="button" class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-red-600 bg-red-600 hover:bg-red-700 focus:ring-red-900">Cancel Ticket</button>`);
                 $('#ticketUpdateInput').html('');
@@ -547,19 +552,23 @@
                     $('#ticketButton').removeClass('hidden');
                     $('#ticketButton').html('Mark as DONE');
                 }
+                $('#inputeTicketUpdate').removeClass('hidden');
                 if(update == ''){
                     $('#ticketUpdateDiv').html('');
                 }else{
                     $('#ticketUpdateDiv').html(`<hr class="my-5">
                                                 <label for="ticketResolution" class="block text-base font-medium text-white">Update</label>
-                                                <textarea disabled style="resize: none;" rows=10 cols=50 maxlength=1000 class="block p-2.5 w-full max-h- text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
+                                                <textarea disabled style="resize: none;" rows=10 cols=50 maxlength=1000 class="block p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
                 }
                 $('#ticketResolutionDiv').html('');
                 $('#updateButtonDiv').html(`<button id="updateButton" type="button" data-modal-toggle="ticketModal" type="button" class="focus:outline-none text-neutral-800 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-yellow-500 bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-900">Update Ticket</button>`);
                 $('#cancelButtonDiv').html(`<button id="cancelButton" type="button" data-modal-toggle="ticketModal" type="button"               class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-red-600 bg-red-600 hover:bg-red-700 focus:ring-red-900">Cancel Ticket</button>`);
+                // $('#ticketUpdateInput').html(`<hr class="my-5">
+                //                                 <label for="ticketUpdate" class="block mb-2 text-base font-medium text-white">Update</label>
+                //                                 <textarea style="resize: none;" id="ticketUpdate" name="ticketUpdate" rows=4 cols=50 maxlength=1000 class="taAutoHeight block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">${update}</textarea>`);
                 $('#ticketUpdateInput').html(`<hr class="my-5">
-                                                <label for="ticketUpdate" class="block mb-2 text-base font-medium text-white">Update</label>
-                                                <textarea style="resize: none;" id="ticketUpdate" name="ticketUpdate" rows=4 cols=50 maxlength=1000 class="taAutoHeight block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">${update}</textarea>`);
+                                            <label for="ticketResolution" class="block text-base font-medium text-white">Update</label>
+                                            <textarea disabled style="resize: none;" rows=4 cols=50 maxlength=1000 class="tUAutoHeight block max-h-[200px] p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
                 $('#ticketResolutionInput').html(`
                                                 <label for="ticketResolution" class="block mt-5 mb-2 text-base font-medium text-white">Resolution <span class="text-red-500 text-sm">*Required upon completion</span></label>
                                                 <textarea required style="resize: none;" id="ticketResolution" name="ticketResolution" rows=4 cols=50 maxlength=1000 class="taAutoHeight block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"></textarea>`);
@@ -573,6 +582,7 @@
                 if($('#ticketButton').length){
                     $('#ticketButton').addClass('hidden');
                 }
+                $('#inputeTicketUpdate').addClass('hidden');
                 $('#ticketUpdateInput').html('');
                 $('#ticketResolutionInput').html('');
                 $('#updateButtonDiv').html('');
@@ -582,7 +592,7 @@
                 }else{
                     $('#ticketUpdateDiv').html(`<hr class="my-5">
                                                 <label for="doneTicketUpdate" class="block text-base font-medium text-white">Update</label>
-                                                <textarea disabled style="max-height: 150px; resize: none;" id="doneTicketUpdate" class="taAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">${update}</textarea>`);
+                                                <textarea disabled style="max-height: 150px; resize: none;" id="doneTicketUpdate" class="tUAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">${update}</textarea>`);
                 }
                 $('#ticketResolutionDiv').html(`<hr class="my-5">
                                                 <label for="ticketResolution" class="block mb-2 text-base font-medium text-white">Resolution</label>
@@ -626,6 +636,10 @@
             // $("meta[name='refresh_timer']").remove();
             $('meta[http-equiv="refresh"]').attr('content', '');
             $('#viewTicket').click();
+
+            var ticketUpdateHeight = $('.tUAutoHeight');
+            ticketUpdateHeight.css('height', 'auto');
+            ticketUpdateHeight.css('height', ticketUpdateHeight.prop('scrollHeight') + 'px');
 
             var ticketResolution = $('.taAutoHeight');
             ticketResolution.css('height', 'auto');
