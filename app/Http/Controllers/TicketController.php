@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\TicketCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,18 +53,8 @@ class TicketController extends Controller
     }
 
     public function create(){
-        $cats = DB::select('SELECT * FROM ticket_categories ORDER BY ticket_categories.name ASC');
-        $inChargeID = '';
-        $inchargeName = '';
-        $deptRow = DB::table('departments')->where('id', auth()->user()->dept_id)->first();
-        if($deptRow != null){
-            $inChargeID = $deptRow->in_charge;
-        }
-        $inchargeRow = DB::table('users')->where('id', $inChargeID)->first();
-        if($inchargeRow != null){
-            $inchargeName = $inchargeRow->name;
-        }
-        return view('ticketing.create', compact('cats', 'inchargeName'));
+        $cats = TicketCategory::with('user')->orderBy('name', 'asc')->get();
+        return view('ticketing.create', compact('cats'));
     }
 
     public function store(Request $request){
@@ -71,9 +62,9 @@ class TicketController extends Controller
         $subject = $request->subject;
         $description = $request->description;
         $attachment = $request->attachment;
+        $in_charge = $request->in_charge;
         
-        $inChargeID = (DB::table('departments')->where('id', auth()->user()->dept_id)->get())[0]->in_charge;
-        $incharge = (DB::table('users')->where('id', $inChargeID)->first());
+        $incharge = User::where('id', $in_charge)->first();
         $smtp = DB::table('settings')->where('id', 1)->first();
 
         $TicketID = DB::table('tickets')->orderBy('id','DESC')->first();
@@ -93,10 +84,11 @@ class TicketController extends Controller
         }
         $ticketNo = date('m').$TicketID;
 
-        $attPath = null;
         if($attachment != null){
-            $unique = Str::random(12);
-            $attPath = $request->file('attachment')->storeAs('attachments/'.date('mY'), date('Ymd') . '-' . $ticketNo . '.' . $request->file('attachment')->getClientOriginalExtension(), 'public');
+            $filename = date('Ymd') . '-' . $ticketNo . '.' . $request->file('attachment')->getClientOriginalExtension();
+            $path = "storage/attachments/";
+            $attachment_path = $path . $filename;
+            $request->file('attachment')->move(public_path($path), $filename);
         }
 
         $request->validate([
@@ -110,11 +102,11 @@ class TicketController extends Controller
         $ticket->user_id = auth()->user()->id;
         $ticket->department = auth()->user()->dept_id;
         $ticket->nature_of_problem = $nature;
-        $ticket->assigned_to = $inChargeID;
+        $ticket->assigned_to = $in_charge;
         $ticket->subject = $subject;
         $ticket->description = $description;
         if($attachment != null){
-            $ticket->attachment = $attPath;
+            $ticket->attachment = $attachment_path;
         }
         $ticket->is_SAP = '0';
         $ticket->save();
@@ -151,14 +143,12 @@ class TicketController extends Controller
                 $mail->Body    = 'Dear '.$incharge->name.',<br><br>You have a new ticket that was assign to you.<br><br>The Ticket number is: '.$ticketNo.'<br>Please login to IT Ticketing System for the details of this incidents.<br><br>Kind regards,<br>IT Department<br><br><br><i>Note: Please do not reply to this email, this is auto generated email.</i>';
             
                 $mail->send();
-
-                return redirect()->route('ticket.index');
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
-        }else{
-            return redirect()->route('ticket.index');
         }
+        
+        return redirect()->route('ticket.index');
 
         // ===================================================================================================================
     }

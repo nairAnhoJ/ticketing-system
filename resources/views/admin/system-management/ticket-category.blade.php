@@ -79,14 +79,14 @@
                                 <label for="categoryName" class="block mb-2 text-sm font-medium text-white">Category Name</label>
                                 <input type="text" id="categoryName" name="name" autocomplete="off" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
                             </div>
-                            {{-- <div>
+                            <div>
                                 <label for="inchargeUser" class="block mb-2 text-sm font-medium text-white">In-Charge</label>
                                 <select id="inchargeUser" name="inchargeUser" class="border text-sm rounded-lg block w-full py-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
                                     @foreach ($dics as $dic)
                                         <option value="{{ $dic->id }}">{{ $dic->name }}</option>
                                     @endforeach
                                 </select>
-                            </div> --}}
+                            </div>
                         </div>
                         <!-- Modal footer -->
                         <div class="flex items-center p-6 space-x-2 border-t rounded-b border-gray-600">
@@ -139,39 +139,39 @@
         
         {{-- ================================= CHANGE DEPT IN CHARGE MODAL ================================= --}}
             <!-- ========================================================= Modal toggle ========================================================= -->
-            {{-- <button id="changeInChage" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="changeInChageModal">
-            </button> --}}
+            <button id="changeInChage" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="changeInChageModal">
+            </button>
             
             <!-- ========================================================= Main modal ========================================================= -->
-            {{-- <div id="changeInChageModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto h-modal h-full">
-                <div class="relative w-full h-full max-w-2xl md:h-auto"> --}}
+            <div id="changeInChageModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto h-modal h-full">
+                <div class="relative w-full h-full max-w-2xl md:h-auto">
                     <!-- Modal content -->
-                    {{-- <form action="{{ route('incharge.update') }}" method="POST" class="relative rounded-lg shadow bg-gray-700 text-sm">
-                        @csrf --}}
+                    <form action="{{ route('incharge.update') }}" method="POST" class="relative rounded-lg shadow bg-gray-700 text-sm">
+                        @csrf
                         <!-- Modal header -->
-                        {{-- <div class="flex items-center justify-between px-4 py-3 border-b rounded-t border-gray-600">
+                        <div class="flex items-center justify-between px-4 py-3 border-b rounded-t border-gray-600">
                             <h3 id="modalTitle" class="text-2xl font-semibold text-white leading-5">CHANGE DEPARTMENT IN-CHARGE</h3>
                             <button type="button" class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white" data-modal-toggle="changeInChageModal">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
                             </button>
-                        </div> --}}
+                        </div>
                         <!-- Modal body -->
-                        {{-- <div class="px-6 pb-3 space-y-4">
+                        <div class="px-6 pb-3 space-y-4">
                             <input type="hidden" id="dept_id" name="dept_id">
                             <div>
                                 <label for="delCategoryName" class="block mb-2 text-base font-medium text-white">Are you sure you want to change the department in-charge?</label>
                                 <p><span class="text-yellow-500 tracking-wide">WARNING: ALL THE SAVED CATEGORIES WILL BE DELETED.</span></p>
                             </div>
-                        </div> --}}
+                        </div>
                         <!-- Modal footer -->
-                        {{-- <div class="flex items-center p-6 space-x-2 border-t rounded-b border-gray-600">
+                        <div class="flex items-center p-6 space-x-2 border-t rounded-b border-gray-600">
                             <button data-modal-toggle="changeInChageModal" type="submit" class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-red-600 hover:bg-red-700 focus:ring-red-800">Submit</button>
                             <button data-modal-toggle="changeInChageModal" type="button" class="focus:ring-4 focus:outline-none rounded-lg border text-sm font-medium px-5 py-2.5 focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600">Back</button>
                         </div>
                     </form>
                 </div>
-            </div> --}}
-        {{-- ================================= DELETE END ================================= --}}
+            </div>
+        {{-- ================================= CHANGE DEPT IN CHARGE MODAL END ================================= --}}
 
 
   
@@ -180,7 +180,7 @@
         <div class="grid grid-cols-3 mb-0 h-10">
             <div class="h-8 col-span-2">
                 <button class="categoryAdd h-full text-white font-medium rounded-lg text-sm px-8 mr-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none">Add</button>
-                {{-- <div class="flex float-right">
+                <div class="flex float-right">
                     <h1 class="leading-8">Dept In-Charge:</h1>
                     <select id="inchargeDept" class="ml-1 mr-1 border text-sm rounded-lg block w-50 h-8 px-3 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
                         @foreach ($depts as $dept)
@@ -188,7 +188,7 @@
                         @endforeach
                     </select>
                     <button disabled data-modal-toggle="changeInChageModal" id="changeInChargeDept" class="disabled:pointer-events-none disabled:opacity-50 h-8 text-white font-medium rounded-lg text-sm px-8 mr-8 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none">Save</button>
-                </div> --}}
+                </div>
             </div>
             <div class="flex gap-x-3 h-8">
                 <div class="flex items-center w-full">
@@ -215,9 +215,9 @@
                       <th scope="col" class="sticky top-0 py-2 text-center">
                           CATEGORY NAME
                       </th>
-                      {{-- <th scope="col" class="sticky top-0 py-2 text-center">
+                      <th scope="col" class="sticky top-0 py-2 text-center">
                           IN-CHARGE
-                      </th> --}}
+                      </th>
                       <th scope="col" class="sticky top-0 py-2 text-center">
                           ACTION
                       </th>
@@ -235,9 +235,17 @@
                         <td class="py-3 px-6 text-center whitespace-nowrap">
                             {{ $category->name }}
                         </td>
-                        {{-- <td class="py-3 px-6 text-center whitespace-nowrap">
-                            {{ $category->in_charge_name }}
-                        </td> --}}
+                        <td class="py-3 px-6 text-center whitespace-nowrap">
+                            {{ $category->user->name }}
+                            {{-- @foreach ($users as $user)
+                                @php
+                                    if($user->id == $dept->in_charge){
+                                        echo $user->name;
+                                        break;
+                                    }
+                                @endphp
+                            @endforeach --}}
+                        </td>
                         <td class="py-3 px-6 text-center whitespace-nowrap">
                             <a data-id="{{ $category->id }}" data-name="{{ $category->name }}" class="categoryEdit mr-2 text-blue-500 cursor-pointer">EDIT</a>|<a data-id="{{ $category->id }}" data-name="{{ $category->name }}" class="btnCategoryDelete ml-2 text-red-500 cursor-pointer">DELETE</a>
                         </td>

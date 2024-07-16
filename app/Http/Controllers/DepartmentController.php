@@ -22,12 +22,12 @@ class DepartmentController extends Controller
 
         $request->validate([
             'name' => 'required',
-            'inchargeUser' => 'required',
+            // 'inchargeUser' => 'required',
         ]);
 
         $dept = new Department();
         $dept->name = $dept_name;
-        $dept->in_charge = $request->inchargeUser;
+        // $dept->in_charge = $request->inchargeUser;
         $dept->save();
 
         return redirect()->back();
@@ -41,8 +41,11 @@ class DepartmentController extends Controller
             'id' => 'required',
             'name' => 'required',
         ]);
-
-        DB::update('update departments set name = ?, in_charge = ? where id = ?', [$dept_name, $request->inchargeUser, $dept_id]);
+        
+        $dept = Department::where('id', $dept_id)->first();
+        $dept->name = $dept_name;
+        // $dept->in_charge = $request->inchargeUser;
+        $dept->save();
 
         return redirect()->route('department.index');
     }

@@ -11,7 +11,7 @@ class TicketCategoryController extends Controller
     public function index(){
         $inCharge = DB::table('dept_in_charges')->first();
         $deptInCharge = $inCharge->dept_id;
-        $categories = DB::table('ticket_categories')->get();
+        $categories = TicketCategory::with('user')->get();
         $dics = DB::table('users')->where('dept_id', $deptInCharge)->orderBy('name', 'asc')->get();
         $depts = DB::table('departments')->orderBy('name', 'asc')->get();
 
@@ -27,6 +27,7 @@ class TicketCategoryController extends Controller
 
         $cat = new TicketCategory();
         $cat->name = $name;
+        $cat->in_charge = $request->inchargeUser;
         $cat->save();
 
         return redirect()->back();
@@ -40,7 +41,10 @@ class TicketCategoryController extends Controller
         $cat_id = $request->id;
         $cat_name = strtoupper($request->name);
 
-        DB::update('UPDATE ticket_categories SET name=? WHERE id = ?', [$cat_name, $cat_id]);
+        $cat = TicketCategory::where('id', $cat_id)->first();
+        $cat->name = $cat_name;
+        $cat->in_charge = $request->inchargeUser;
+        $cat->save();
 
         return redirect()->back();
     }

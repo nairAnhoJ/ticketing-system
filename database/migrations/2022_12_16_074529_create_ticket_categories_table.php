@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('ticket_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->bigInteger('in_charge')->nullable();
             $table->timestamps();
         });
     }

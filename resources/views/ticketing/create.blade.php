@@ -34,14 +34,16 @@
             <label for="nature" class="block text-sm font-medium text-white">Nature of Problem</label>
             <select required id="nature" name="nature" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">
                 @foreach ($cats as $cat)
-                    <option value="{{$cat->id}}">{{$cat->name}}</option>
+                    <option hidden value=""></option>
+                    <option value="{{$cat->id}}" data-incharge="{{ $cat->user->name }}" data-incharge_id="{{ $cat->in_charge }}">{{$cat->name}}</option>
                 @endforeach
             </select>
 
-            {{-- <div class="mt-5">
+            <div class="mt-5">
                 <label for="subject" class="block text-sm font-medium text-white">In-Charge</label>
-                <h1 id="ticketInChargeDisplay" class="font-semibold">{{ $inchargeName }}</h1>
-            </div> --}}
+                <h1 id="ticketInChargeDisplay" class="font-semibold">-</h1>
+                <input type="hidden" id="in_charge" name="in_charge">
+            </div>
 
             <div class="mt-5">
                 <label for="subject" class="block text-sm font-medium text-white">Subject</label>
@@ -80,7 +82,9 @@
 
             $('#nature').change(function(){
                 var incharge = $(this).find('option:selected').data('incharge');
+                var incharge_id = $(this).find('option:selected').data('incharge_id');
                 $('#ticketInChargeDisplay').html(incharge);
+                $('#in_charge').val(incharge_id);
                 $('#ticketInCharge').html(incharge);
             });
         });

@@ -79,14 +79,14 @@
                                 <label for="deptName" class="block mb-2 text-sm font-medium text-white">Department Name</label>
                                 <input type="text" id="deptName" name="name" autocomplete="off" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="inchargeUser" class="block mb-2 text-sm font-medium text-white">In-Charge</label>
                                 <select id="inchargeUser" name="inchargeUser" class="border text-sm rounded-lg block w-full py-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
                                     @foreach ($dics as $dic)
                                         <option value="{{ $dic->id }}">{{ $dic->name }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
                         </div>
                         <!-- Modal footer -->
                         <div class="flex items-center p-6 space-x-2 border-t border-gray-600 rounded-b">
@@ -175,7 +175,7 @@
             <div class="grid h-10 grid-cols-3 mb-0">
                 <div class="h-8 col-span-2">
                     <button class="h-full px-10 mb-2 mr-2 text-sm font-medium text-white bg-blue-600 rounded-lg deptAdd hover:bg-blue-700 focus:outline-none">Add</button>
-                    <div class="flex float-right">
+                    {{-- <div class="flex float-right">
                         <h1 class="leading-8">Dept In-Charge:</h1>
                         <select id="inchargeDept" class="ml-1 mr-1 border text-sm rounded-lg block w-50 h-8 px-3 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
                             @foreach ($depts as $dept)
@@ -183,7 +183,7 @@
                             @endforeach
                         </select>
                         <button disabled data-modal-toggle="changeInChageModal" id="changeInChargeDept" class="h-8 px-8 mb-2 mr-8 text-sm font-medium text-white bg-blue-600 rounded-lg disabled:pointer-events-none disabled:opacity-50 hover:bg-blue-700 focus:outline-none">Save</button>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="flex h-8 gap-x-3">
                     <div class="flex items-center w-full">
@@ -210,9 +210,9 @@
                             <th scope="col" class="sticky top-0 py-2 text-center">
                                 DEPARTMENT NAME
                             </th>
-                            <th scope="col" class="sticky top-0 py-2 text-center">
+                            {{-- <th scope="col" class="sticky top-0 py-2 text-center">
                                 IN-CHARGE
-                            </th>
+                            </th> --}}
                             <th scope="col" class="sticky top-0 py-2 text-center">
                                 ACTION
                             </th>
@@ -230,7 +230,7 @@
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
                                     {{ $dept->name }}
                                 </td>
-                                <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{-- <td class="px-6 py-3 text-center whitespace-nowrap">
                                     @foreach ($users as $user)
                                         @php
                                             if($user->id == $dept->in_charge){
@@ -239,7 +239,7 @@
                                             }
                                         @endphp
                                     @endforeach
-                                </td>
+                                </td> --}}
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
                                     <a data-id="{{ $dept->id }}" data-name="{{ $dept->name }}" class="mr-2 text-blue-500 cursor-pointer deptEdit">EDIT</a>|<a data-id="{{ $dept->id }}" data-name="{{ $dept->name }}" class="ml-2 text-red-500 cursor-pointer btnDeptDelete">DELETE</a>
                                 </td>
