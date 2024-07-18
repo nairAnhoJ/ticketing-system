@@ -594,9 +594,12 @@
                 if(update == ''){
                     $('#ticketUpdateDiv').html('');
                 }else{
-                    $('#ticketUpdateDiv').html(`<hr class="my-5">
-                                                <label for="doneTicketUpdate" class="block text-base font-medium text-white">Update</label>
-                                                <textarea disabled style="max-height: 150px; resize: none;" id="doneTicketUpdate" class="tUAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">${update}</textarea>`);
+                    $('#ticketUpdateInput').html(`<hr class="my-5">
+                                            <label for="ticketResolution" class="block text-base font-medium text-white">Update</label>
+                                            <textarea disabled style="resize: none;" rows=4 cols=50 maxlength=1000 class="tUAutoHeight block max-h-[200px] p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
+                    // $('#ticketUpdateDiv').html(`<hr class="my-5">
+                    //                             <label for="doneTicketUpdate" class="block text-base font-medium text-white">Update</label>
+                    //                             <textarea disabled style="max-height: 150px; resize: none;" id="doneTicketUpdate" class="tUAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">${update}</textarea>`);
                 }
                 $('#ticketResolutionDiv').html(`<hr class="my-5">
                                                 <label for="ticketResolution" class="block mb-2 text-base font-medium text-white">Resolution</label>

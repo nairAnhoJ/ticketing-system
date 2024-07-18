@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('password');
             $table->string('role');
+            $table->smallInteger('first_time_login')->default('1');
             $table->rememberToken();
             $table->timestamps();
         });
