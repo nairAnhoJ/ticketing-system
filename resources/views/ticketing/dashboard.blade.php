@@ -84,12 +84,11 @@
             <a href="{{ route('ticket.reports') }}" type="button" class="justify-self-end w-48 text-white text-center focus:ring-4 font-medium rounded-lg text-sm px-5 py-1.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Ticket Report</a>
             @endif
         </div>
-
-        <!-- ====================================================== Modal toggle ====================================================== -->
-        <button id="viewTicket" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="ticketModal">
-        </button>
         
-        <!-- ========================================================= Main modal ========================================================= -->
+        <!-- ========================================== Main modal ========================================== -->
+            <button id="viewTicket" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="ticketModal">
+            </button>
+
             <div id="ticketModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
                 <div class="relative w-full h-full max-w-4xl md:h-auto">
                     <!-- Modal content -->
@@ -112,46 +111,55 @@
                             </div>
                         <!-- Modal header -->
                         <!-- Modal body -->
-                        <div class="p-3">
-                            <p id="ticketSubject" class="mb-2 text-xl font-semibold leading-relaxed text-gray-300"></p>
-                            <div id="ticketDesc" class="mb-2 text-base leading-relaxed text-gray-300 whitespace-pre-line"></div>
-                            <div>
-                                <button id="AttachedFileButton" data-modal-toggle="AttachedFileModal" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View Attached File</button>
-                                <button id="SAPButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View SAP Business Partner</button>
+                            <div class="p-3">
+                                <p id="ticketSubject" class="mb-2 text-xl font-semibold leading-relaxed text-gray-300"></p>
+                                <div id="ticketDesc" class="mb-2 text-base leading-relaxed text-gray-300 whitespace-pre-line"></div>
+                                <div>
+                                    <button id="AttachedFileButton" data-modal-toggle="AttachedFileModal" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View Attached File</button>
+                                    <button id="SAPButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View SAP Business Partner</button>
+                                </div>
+                                <div id="ticketUpdateDiv">
+                                    <hr class="my-5">
+                                    <label for="ticketUpdateTextArea" class="block text-base font-medium text-white">Update</label>
+                                    <textarea disabled id="ticketUpdateTextArea" style="resize: none;" rows=4 cols=50 maxlength=1000 class="UpdateDivAutoHeight block max-h-[200px] p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>
+                                </div>
+                                <div id="ticketUpdateInputDiv" class="flex gap-x-3">
+                                    <input type="text" id="ticketUpdateInput" name="ticketUpdate" class="w-full first-letter:block p-2.5 text-sm rounded-lg bg-gray-700 border border-gray-300 placeholder-gray-400 text-white" placeholder="Update here..." autocomplete="off">
+                                    <div id="updateButtonDiv" class=" whitespace-nowrap">
+                                        <button id="updateButton" type="button" data-modal-toggle="ticketModal" type="button" class="focus:outline-none text-neutral-800 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-yellow-500 bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-900">Update Ticket</button>
+                                    </div>
+                                </div>
+                                @if (auth()->user()->dept_id == $deptInCharge)
+                                    <div id="ticketResolutionInputDiv">
+                                        <label for="ticketResolutionInput" class="block mt-5 mb-2 text-base font-medium text-white">
+                                            Resolution <span class="text-red-500 text-sm">*Required upon completion</span>
+                                        </label>
+                                        <textarea required style="resize: none;" id="ticketResolutionInput" name="ticketResolution" rows=4 cols=50 maxlength=1000 class="block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                    </div>
+                                @endif
+                                <div id="ticketResolutionDiv">
+                                    <hr class="my-5">
+                                    <label for="ticketResolution" class="block mb-2 text-base font-medium text-white">Resolution</label>
+                                    <textarea disabled style="max-height: 150px; resize: none;" id="ticketResolution" class="ResolutionAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">
+                                    </textarea>
+                                </div>
                             </div>
-                            <div id="ticketUpdateInput"></div>
-                            <div class="flex gap-x-3">
-                                <input type="text" id="inputeTicketUpdate" name="ticketUpdate" class="w-full first-letter:block p-2.5 text-sm rounded-lg bg-gray-700 border border-gray-300 placeholder-gray-400 text-white" placeholder="Update here..." autocomplete="off">
-                                <div id="updateButtonDiv" class=" whitespace-nowrap"></div>
-                            </div>
-                            @if (auth()->user()->dept_id == $deptInCharge)
-                                <div id="ticketResolutionInput"></div>
-                            {{-- @else --}}
-                            @endif
-                                {{-- <div id="ticketUpdate"></div>
-                            @endif --}}
-
-                            {{-- @if (auth()->user()->dept_id != $deptInCharge) --}}
-                                {{-- <div id="ticketUpdateDiv"></div> --}}
-                            {{-- @endif --}}
-
-                            <div id="ticketResolutionDiv"></div>
-                        </div>
                         <!-- Modal footer -->
                         <div class="flex items-center p-3 border-t border-gray-600 rounded-b">
-                            <div id="updateButtonDiv"></div>
                             @if (auth()->user()->dept_id == $deptInCharge)
                                 <button data-modal-toggle="ticketModal" type="submit" id="ticketButton" class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 mr-3 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"></button>
                             @endif
-                            <div id="cancelButtonDiv"></div>
+                            <div id="cancelButtonDiv">
+                                <button id="cancelButton" type="button" data-modal-toggle="ticketModal" type="button" class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-red-600 bg-red-600 hover:bg-red-700 focus:ring-red-900">Cancel Ticket</button>
+                            </div>
                             <button data-modal-toggle="ticketModal" type="button" class="focus:ring-4 focus:outline-none rounded-lg border text-sm font-medium px-5 py-2.5 focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600">Close</button>
                         </div>
                     </form>
                 </div>
             </div>
-        <!-- ========================================================= Main modal ========================================================= -->
+        <!-- ========================================== Main modal ========================================== -->
         
-        <!-- ====================================================== Attached File modal ====================================================== -->
+        <!-- ======================================= Attached File modal ======================================= -->
             <div id="AttachedFileModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
                 <div class="relative w-full h-full max-w-6xl md:h-auto">
                     <!-- Modal content -->
@@ -178,9 +186,9 @@
                     </div>
                 </div>
             </div>
-        <!-- ====================================================== Attached File modal ====================================================== -->
+        <!-- ======================================= Attached File modal ======================================= -->
         
-        <!-- ========================================================= SAP modal ========================================================= -->
+        <!-- ============================================== SAP modal ============================================== -->
             <button id="viewSAP" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="SAPModal">
             </button>
 
@@ -341,142 +349,161 @@
                     </div>
                 </div>
             </div>
-        <!-- ========================================================= SAP modal ========================================================= -->
+        <!-- ============================================== SAP modal ============================================== -->
 
 
         {{-- CONTROLS --}}
-        <div class="grid h-10 grid-cols-3 mb-0">
-            <div class="h-8 col-span-2">
-                {{-- @if ($userDept != 'IT') --}}
-                @if (auth()->user()->dept_id != $deptInCharge)
-                    <a href="{{ route('ticket.create') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Create Ticket</a>
-                    {{-- <a href="{{ route('sap.index') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">SAP BP</a> --}}
-                @else
-                    {{-- <a href="{{ route('ticket.createForIT') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Create Ticket</a> --}}
-                @endif
-            </div>
-            <div class="flex h-8">
-                {{-- <div class="flex w-1/3">
-                    <label for="status" class="self-center mr-3">Status: </label>
-                    <select id="status" class="block border text-sm rounded-lg px-2.5 pt-1 pb-0 w-full h-full bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
-                        <option selected value="all">All</option>
-                        <option value="proc">Pending</option>
-                        <option value="mobo">Ongoing</option>
-                        <option value="ram">Done</option>
-                    </select>
-                </div> --}}
-                <div class="items-center w-full">
-                    <label for="simple-search" class="sr-only">Search</label>
-                    <div class="relative w-full h-full">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg aria-hidden="true" class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+            <div class="grid h-10 grid-cols-3 mb-0">
+                <div class="h-8 col-span-2">
+                    {{-- @if ($userDept != 'IT') --}}
+                    @if (auth()->user()->dept_id != $deptInCharge)
+                        <a href="{{ route('ticket.create') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Create Ticket</a>
+                        {{-- <a href="{{ route('sap.index') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">SAP BP</a> --}}
+                    @else
+                        {{-- <a href="{{ route('ticket.createForIT') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Create Ticket</a> --}}
+                    @endif
+                </div>
+                <div class="flex h-8">
+                    {{-- <div class="flex w-1/3">
+                        <label for="status" class="self-center mr-3">Status: </label>
+                        <select id="status" class="block border text-sm rounded-lg px-2.5 pt-1 pb-0 w-full h-full bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+                            <option selected value="all">All</option>
+                            <option value="proc">Pending</option>
+                            <option value="mobo">Ongoing</option>
+                            <option value="ram">Done</option>
+                        </select>
+                    </div> --}}
+                    <div class="items-center w-full">
+                        <label for="simple-search" class="sr-only">Search</label>
+                        <div class="relative w-full h-full">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg aria-hidden="true" class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            <input type="text" id="tableSearch" autocomplete="off" class="h-full border text-sm rounded-lg block w-full pl-10 p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Search" required>
                         </div>
-                        <input type="text" id="tableSearch" autocomplete="off" class="h-full border text-sm rounded-lg block w-full pl-10 p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Search" required>
                     </div>
                 </div>
             </div>
-        </div>
+        {{-- CONTROLS --}}
 
         
-            {{-- TABLE --}}
-        <div style="max-height: calc(100% - 85px);" class="relative overflow-x-auto rounded-t-lg shadow-md">
-            <table class="min-w-full text-sm text-left text-gray-400">
-                <thead class="relative top-0 text-xs text-gray-400 uppercase bg-gray-600 border-gray-600 border-x-8">
-                    <tr class="sticky top-0 bg-gray-600">
-                        <th id="thl" scope="col" class="sticky top-0 py-2 text-center">
-                            TICKET #
-                        </th>
-                        <th scope="col" class="sticky top-0 py-2 text-center">
-                            REQUESTER
-                        </th>
-                        <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
-                            DEPARTMENT
-                        </th>
-                        <th scope="col" class="sticky top-0 py-2 text-center">
-                            DATE CREATED
-                        </th>
-                        <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
-                            STATUS
-                        </th>
-                        <th scope="col" class="sticky top-0 py-2 text-center">
-                            NATURE OF PROBLEM
-                        </th>
-                        <th scope="col" class="sticky top-0 max-w-xs py-2 text-center">
-                            SUBJECT
-                        </th>
-                        <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
-                            ASSIGNED TO
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="ticketTableBody" style="max-height: calc(100% - 126px);">
-                    @foreach ($tickets as $ticket)
-                        <tr class="bg-gray-800 border-gray-700 hover:bg-gray-700 cursor-pointer {{ (strtotime($ticket->created_at) > strtotime("-1 day")) ? 'text-green-500' : '' }}">
-                            <th scope="row" class="px-6 py-3 font-medium text-center text-white">
-                                <span data-id="{{ $ticket->id }}" data-ticket_no="{{ $ticket->ticket_no }}" data-is_SAP="{{ $ticket->is_SAP }}" data-user="{{ $ticket->requestor->name }}" data-dept="{{ $ticket->departmentRow->name }}" data-date="{{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}" data-subject="{{ $ticket->subject }}" data-desc="{{ $ticket->description }}" data-status="{{ $ticket->status }}" data-src="{{ $ticket->attachment }}" data-reso="{{ $ticket->resolution }}" data-update="{{ $ticket->update }}">
-                                    {{ $ticket->ticket_no }}
-                                </span>
+        {{-- TABLE --}}
+            <div style="max-height: calc(100% - 85px);" class="relative overflow-x-auto rounded-t-lg shadow-md">
+                <table class="min-w-full text-sm text-left text-gray-400">
+                    <thead class="relative top-0 text-xs text-gray-400 uppercase bg-gray-600 border-gray-600 border-x-8">
+                        <tr class="sticky top-0 bg-gray-600">
+                            <th id="thl" scope="col" class="sticky top-0 py-2 text-center">
+                                TICKET #
                             </th>
-                            <td class="px-6 py-3 text-center whitespace-nowrap">
-                                {{ $ticket->requestor['name'] }}
-                            </td>
-                            <td class="px-6 py-3 text-center whitespace-nowrap">
-                                {{ $ticket->departmentRow['name'] }}
-                            </td>
-                            <td class="px-6 py-3 text-center whitespace-nowrap">
-                                {{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}
-                            </td>
-                            <td class="px-6 py-3 text-center whitespace-nowrap">
-                                <span class="
-                                    @php
-                                        $status = $ticket->status;
-                                        if($status == 'PENDING'){
-                                            echo 'text-red-500';
-                                        }elseif($status == 'ONGOING'){
-                                            echo 'text-amber-300';
-                                        }elseif($status == 'DONE'){
-                                            echo 'text-teal-500';
-                                        }elseif($status == 'CANCELLED'){
-                                            echo 'text-neutral-300';
-                                        }
-                                    @endphp
-                                ">
-                                    @php
-                                        echo $status;
-                                    @endphp
-                                </span>
-                            </td>
-                            <td class="px-6 py-3 text-center whitespace-nowrap">
-                                {{ $ticket->category['name'] }}
-                            </td>
-                            <td class="max-w-xs px-6 py-3 overflow-hidden text-center whitespace-nowrap">
-                                {{ $ticket->subject }}
-                            </td>
-                            <td class="px-6 py-3 text-center whitespace-nowrap">
-                                {{ $ticket->assigned['name'] }}
-                            </td>
+                            <th scope="col" class="sticky top-0 py-2 text-center">
+                                REQUESTER
+                            </th>
+                            <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
+                                DEPARTMENT
+                            </th>
+                            <th scope="col" class="sticky top-0 py-2 text-center">
+                                DATE CREATED
+                            </th>
+                            <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
+                                STATUS
+                            </th>
+                            <th scope="col" class="sticky top-0 py-2 text-center">
+                                NATURE OF PROBLEM
+                            </th>
+                            <th scope="col" class="sticky top-0 max-w-xs py-2 text-center">
+                                SUBJECT
+                            </th>
+                            <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
+                                ASSIGNED TO
+                            </th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody id="ticketTableBody" style="max-height: calc(100% - 126px);">
+                        @foreach ($tickets as $ticket)
+                            <tr class="bg-gray-800 border-gray-700 hover:bg-gray-700 cursor-pointer {{ (strtotime($ticket->created_at) > strtotime("-1 day")) ? 'text-green-500' : '' }}">
+                                <th scope="row" class="px-6 py-3 font-medium text-center text-white">
+                                    <span 
+                                        data-id="{{ $ticket->id }}" 
+                                        data-ticket_no="{{ $ticket->ticket_no }}" 
+                                        data-is_SAP="{{ $ticket->is_SAP }}" 
+                                        data-user_id="{{ $ticket->user_id }}" 
+                                        data-user="{{ $ticket->requestor->name }}" 
+                                        data-dept="{{ $ticket->departmentRow->name }}" 
+                                        data-date="{{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}" 
+                                        data-subject="{{ $ticket->subject }}" 
+                                        data-desc="{{ $ticket->description }}" 
+                                        data-status="{{ $ticket->status }}" 
+                                        data-src="{{ $ticket->attachment }}" 
+                                        data-reso="{{ $ticket->resolution }}" 
+                                        data-update="{{ $ticket->update }}">
+                                        {{ $ticket->ticket_no }}
+                                    </span>
+                                </th>
+                                <td class="px-6 py-3 text-center whitespace-nowrap">
+                                    {{ $ticket->requestor['name'] }}
+                                </td>
+                                <td class="px-6 py-3 text-center whitespace-nowrap">
+                                    {{ $ticket->departmentRow['name'] }}
+                                </td>
+                                <td class="px-6 py-3 text-center whitespace-nowrap">
+                                    {{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}
+                                </td>
+                                <td class="px-6 py-3 text-center whitespace-nowrap">
+                                    <span class="
+                                        @php
+                                            $status = $ticket->status;
+                                            if($status == 'PENDING'){
+                                                echo 'text-red-500';
+                                            }elseif($status == 'ONGOING'){
+                                                echo 'text-amber-300';
+                                            }elseif($status == 'DONE'){
+                                                echo 'text-teal-500';
+                                            }elseif($status == 'CANCELLED'){
+                                                echo 'text-neutral-300';
+                                            }
+                                        @endphp
+                                    ">
+                                        @php
+                                            echo $status;
+                                        @endphp
+                                    </span>
+                                </td>
+                                <td class="px-6 py-3 text-center whitespace-nowrap">
+                                    {{ $ticket->category['name'] }}
+                                </td>
+                                <td class="max-w-xs px-6 py-3 overflow-hidden text-center whitespace-nowrap">
+                                    {{ $ticket->subject }}
+                                </td>
+                                <td class="px-6 py-3 text-center whitespace-nowrap">
+                                    {{ $ticket->assigned['name'] }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        {{-- TABLE --}}
     </div>
 
   <script>
     $(document).ready(function(){
-
+        var myID = {{ auth()->user()->id }};
+        var myDept = {{ auth()->user()->dept_id }};
+        var deptInCharge = {{ $deptInCharge }};
         
-        var delayTime = 90000;
-        var timeoutID;
-        function refreshPage() {
-            location.reload();
-        }
-        function resetTimeout() {
-            clearTimeout(timeoutID);
-            timeoutID = setTimeout(refreshPage, delayTime);
-        }
-        $(document).on('mousemove keydown', resetTimeout);
-        resetTimeout();
+        // Reload Page
+            var delayTime = 90000;
+            var timeoutID;
+            function refreshPage() {
+                location.reload();
+            }
+            function resetTimeout() {
+                clearTimeout(timeoutID);
+                timeoutID = setTimeout(refreshPage, delayTime);
+            }
+            $(document).on('mousemove keydown', resetTimeout);
+            resetTimeout();
+        // Reload Page
 
 
 
@@ -498,159 +525,200 @@
         }
 
         $('#ticketTableBody tr').click(function() {
-            var id = $(this).find("span").data('id');
-            $('#ticketID').val(id);
+            // Ticket Variables
+                var id = $(this).find("span").data('id');
+                var user_id = $(this).find("span").data('user_id');
+                var ticket_no = $(this).find("span").data('ticket_no');
+                var req = $(this).find("span").data('user');
+                var dept = $(this).find("span").data('dept');
+                var date = $(this).find("span").data('date');
+                var subject = $(this).find("span").data('subject');
+                var desc = $(this).find("span").data('desc');
+                var status = $(this).find("span").data('status');
+                var update = $(this).find("span").data('update');
+                var src = $(this).find("span").data('src');
+                var reso = $(this).find("span").data('reso');
+                var is_SAP = $(this).find("span").data('is_sap');
+            // Ticket Variables
 
-            var ticket_no = $(this).find("span").data('ticket_no');
-            $('#ticketNumber').html(ticket_no);
-            $('#aticketNumber').html(ticket_no);
-            $('#sticketNumber').html(ticket_no);
-
-            var req = $(this).find("span").data('user');
-            $('#ticketRequester').html(req);
-
-            var dept = $(this).find("span").data('dept');
-            $('#ticketDepartment').html(dept);
+            // Modal Display
+                $('#ticketID').val(id);
+                $('#ticketNumber').html(ticket_no);
+                $('#aticketNumber').html(ticket_no);
+                $('#sticketNumber').html(ticket_no);
+                $('#ticketRequester').html(req);
+                $('#ticketDepartment').html(dept);
+                $('#ticketDate').html(date);
+                $('#ticketSubject').html(subject);
+                $('#ticketDesc').html(desc);
+            // Modal Display
             
-            var date = $(this).find("span").data('date');
-            $('#ticketDate').html(date);
+            // Attachment
+                if(src != ""){
+                    var nsrc = `{{ asset('${src}') }}`;
+                    $('#ticketAttachment').prop('src', nsrc);
+                    $('#AttachedFileButton').removeClass('hidden');
+                }else{
+                    $('#AttachedFileButton').addClass('hidden');
+                }
+            // Attachment
             
-            var subject = $(this).find("span").data('subject');
-            $('#ticketSubject').html(subject);
-            
-            var desc = $(this).find("span").data('desc');
-            $('#ticketDesc').html(desc);
-            
-            var src = $(this).find("span").data('src');
-            if(src != ""){
-                var nsrc = `{{ asset('${src}') }}`;
-                $('#ticketAttachment').prop('src', nsrc);
-                $('#AttachedFileButton').removeClass('hidden');
-            }else{
-                $('#AttachedFileButton').addClass('hidden');
-            }
-            
-            var status = $(this).find("span").data('status');
-            var update = $(this).find("span").data('update');
             $('#ticketStatus').val(status);
             $('#ticketStatus2').html(status);
+
             if(status == 'PENDING'){
-                if($('#ticketButton').length){
-                    $('#ticketButton').removeClass('hidden');
-                    $('#ticketButton').html('Mark as ONGOING');
-                }
-                $('#inputeTicketUpdate').addClass('hidden');
-                $('#updateButtonDiv').html('');
-                $('#cancelButtonDiv').html(`<button id="cancelButton" type="button" data-modal-toggle="ticketModal" type="button" class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-red-600 bg-red-600 hover:bg-red-700 focus:ring-red-900">Cancel Ticket</button>`);
-                $('#ticketUpdateInput').html('');
-                $('#ticketResolutionInput').html('');
-                $('#ticketUpdateDiv').html('');
-                $('#ticketResolutionDiv').html('');
+                // DIVS 
+                    // Update
+                        $('#ticketUpdateTextArea').val('');
+                        $('#ticketUpdateDiv').addClass('hidden');
+                    // Update
+                    // Resolution
+                        $('#ticketResolutionDiv').addClass('hidden');
+                    // Resolution
+                // DIVS
+
+                // INPUTS
+                    // Update
+                        $('#ticketUpdateInputDiv').addClass('hidden');
+                    // Update
+                    // Resolution
+                        $('#ticketResolutionInputDiv').addClass('hidden');
+                    // Resolution
+                // INPUTS
+
+                // BUTTONS
+                    if($('#ticketButton').length){
+                        $('#ticketButton').removeClass('hidden');
+                        $('#ticketButton').html('Mark as ONGOING');
+                    }
+                    $('#cancelButtonDiv').removeClass('hidden');
+                // BUTTONS
+
                 $('#ticketStatus2').removeClass('text-amber-300');
                 $('#ticketStatus2').removeClass('text-teal-500');
                 $('#ticketStatus2').addClass('text-red-500');
                 $('#ticketStatus2').removeClass('text-neutral-300');
-                $('#ticketUpdateDiv').addClass('hidden');
             }else if(status == 'ONGOING'){
-                if($('#ticketButton').length){
-                    $('#ticketButton').removeClass('hidden');
-                    $('#ticketButton').html('Mark as DONE');
-                }
-                $('#inputeTicketUpdate').removeClass('hidden');
-                if(update == ''){
-                    $('#ticketUpdateDiv').html('');
-                }else{
-                    $('#ticketUpdateDiv').html(`<hr class="my-5">
-                                                <label for="ticketResolution" class="block text-base font-medium text-white">Update</label>
-                                                <textarea disabled style="resize: none;" rows=10 cols=50 maxlength=1000 class="block p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
-                }
-                $('#ticketResolutionDiv').html('');
-                $('#updateButtonDiv').html(`<button id="updateButton" type="button" data-modal-toggle="ticketModal" type="button" class="focus:outline-none text-neutral-800 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-yellow-500 bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-900">Update Ticket</button>`);
-                $('#cancelButtonDiv').html(`<button id="cancelButton" type="button" data-modal-toggle="ticketModal" type="button"               class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-red-600 bg-red-600 hover:bg-red-700 focus:ring-red-900">Cancel Ticket</button>`);
-                // $('#ticketUpdateInput').html(`<hr class="my-5">
-                //                                 <label for="ticketUpdate" class="block mb-2 text-base font-medium text-white">Update</label>
-                //                                 <textarea style="resize: none;" id="ticketUpdate" name="ticketUpdate" rows=4 cols=50 maxlength=1000 class="taAutoHeight block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">${update}</textarea>`);
-                $('#ticketUpdateInput').html(`<hr class="my-5">
-                                            <label for="ticketResolution" class="block text-base font-medium text-white">Update</label>
-                                            <textarea disabled style="resize: none;" rows=4 cols=50 maxlength=1000 class="tUAutoHeight block max-h-[200px] p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
-                $('#ticketResolutionInput').html(`
-                                                <label for="ticketResolution" class="block mt-5 mb-2 text-base font-medium text-white">Resolution <span class="text-red-500 text-sm">*Required upon completion</span></label>
-                                                <textarea required style="resize: none;" id="ticketResolution" name="ticketResolution" rows=4 cols=50 maxlength=1000 class="taAutoHeight block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"></textarea>`);
+                // DIVS 
+                    // Update
+                        $('#ticketUpdateTextArea').val(update);
+                        $('#ticketUpdateDiv').removeClass('hidden');
+                    // Update
+                    // Resolution
+                        $('#ticketResolution').val(reso);
+                        $('#ticketResolutionDiv').addClass('hidden');
+                    // Resolution
+                // DIVS
+
+                // INPUTS
+                    if(myID == user_id || myDept == deptInCharge){
+                        $('#ticketUpdateInputDiv').removeClass('hidden');
+                    }else{
+                        $('#ticketUpdateInputDiv').addClass('hidden');
+                    }
+                    // Resolution
+                        $('#ticketResolutionInputDiv').removeClass('hidden');
+                    // Resolution
+                // INPUTS
+
+                // BUTTONS
+                    if($('#ticketButton').length){
+                        $('#ticketButton').removeClass('hidden');
+                        $('#ticketButton').html('Mark as DONE');
+                    }
+                    $('#cancelButtonDiv').removeClass('hidden');
+                // BUTTONS
+                
                 $('#ticketStatus2').removeClass('text-red-500');
                 $('#ticketStatus2').removeClass('text-teal-500');
                 $('#ticketStatus2').addClass('text-amber-300');
                 $('#ticketStatus2').removeClass('text-neutral-300');
-                $('#ticketUpdateDiv').removeClass('hidden');
             }else if(status == 'DONE'){
-                var reso = $(this).find("span").data('reso');
-                if($('#ticketButton').length){
-                    $('#ticketButton').addClass('hidden');
-                }
-                $('#inputeTicketUpdate').addClass('hidden');
-                $('#ticketUpdateInput').html('');
-                $('#ticketResolutionInput').html('');
-                $('#updateButtonDiv').html('');
-                $('#cancelButtonDiv').html('');
-                if(update == ''){
-                    $('#ticketUpdateDiv').html('');
-                }else{
-                    $('#ticketUpdateInput').html(`<hr class="my-5">
-                                            <label for="ticketResolution" class="block text-base font-medium text-white">Update</label>
-                                            <textarea disabled style="resize: none;" rows=4 cols=50 maxlength=1000 class="tUAutoHeight block max-h-[200px] p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
-                    // $('#ticketUpdateDiv').html(`<hr class="my-5">
-                    //                             <label for="doneTicketUpdate" class="block text-base font-medium text-white">Update</label>
-                    //                             <textarea disabled style="max-height: 150px; resize: none;" id="doneTicketUpdate" class="tUAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">${update}</textarea>`);
-                }
-                $('#ticketResolutionDiv').html(`<hr class="my-5">
-                                                <label for="ticketResolution" class="block mb-2 text-base font-medium text-white">Resolution</label>
-                                                <textarea disabled style="max-height: 150px; resize: none;" id="ticketResolution" class="taAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">${reso}</textarea>`);
+                // DIVS 
+                    // Update
+                        $('#ticketUpdateTextArea').val(update);
+                        $('#ticketUpdateDiv').removeClass('hidden');
+                    // Update
+                    // Resolution
+                        $('#ticketResolution').val(reso);
+                        $('#ticketResolutionDiv').removeClass('hidden');
+                    // Resolution
+                // DIVS
+
+                // INPUTS
+                    // Update
+                        $('#ticketUpdateInputDiv').addClass('hidden');
+                    // Update
+                    // Resolution
+                        $('#ticketResolutionInputDiv').addClass('hidden');
+                    // Resolution
+                // INPUTS
+
+                // BUTTONS
+                    if($('#ticketButton').length){
+                        $('#ticketButton').addClass('hidden');
+                    }
+                    $('#cancelButtonDiv').addClass('hidden');
+                // BUTTONS
+
                 $('#ticketStatus2').removeClass('text-red-500');
                 $('#ticketStatus2').removeClass('text-amber-300');
                 $('#ticketStatus2').addClass('text-teal-500');
                 $('#ticketStatus2').removeClass('text-neutral-300');
-                $('#ticketUpdateDiv').removeClass('hidden');
             }else if(status == 'CANCELLED'){
-                if($('#ticketButton').length){
-                    $('#ticketButton').addClass('hidden');
-                }
-                $('#ticketUpdateInput').html('');
-                $('#updateButtonDiv').html('');
-                $('#ticketResolutionInput').html('');
-                $('#cancelButtonDiv').html('');
-                if(update == ''){
-                    $('#ticketUpdateDiv').html('');
-                }else{
-                    $('#ticketUpdateDiv').html(`<hr class="my-5">
-                                                <label for="doneTicketUpdate" class="block text-base font-medium text-white">Update</label>
-                                                <textarea disabled style="resize: none;" cols=50 maxlength=1000 id="ticketResolution" class="block p-2.5 w-full text-sm rounded-lg bg-gray-700 border-gray-700 placeholder-gray-400 text-white">${update}</textarea>`);
-                }
-                $('#ticketResolutionDiv').html('');
+                // DIVS 
+                    // Update
+                        $('#ticketUpdateTextArea').val(update);
+                        $('#ticketUpdateDiv').removeClass('hidden');
+                    // Update
+                    // Resolution
+                        $('#ticketResolution').val(reso);
+                        $('#ticketResolutionDiv').addClass('hidden');
+                    // Resolution
+                // DIVS
+
+                // INPUTS
+                    // Update
+                        $('#ticketUpdateInputDiv').addClass('hidden');
+                    // Update
+                    // Resolution
+                        $('#ticketResolutionInputDiv').addClass('hidden');
+                    // Resolution
+                // INPUTS
+
+                // BUTTONS
+                    if($('#ticketButton').length){
+                        $('#ticketButton').addClass('hidden');
+                    }
+                    $('#cancelButtonDiv').addClass('hidden');
+                // BUTTONS
+
                 $('#ticketStatus2').removeClass('text-red-500');
                 $('#ticketStatus2').removeClass('text-amber-300');
                 $('#ticketStatus2').removeClass('text-teal-500');
                 $('#ticketStatus2').addClass('text-neutral-300');
-                $('#ticketUpdateDiv').removeClass('hidden');
             }
             
-            var is_SAP = $(this).find("span").data('is_sap');
-            
-            if(is_SAP != "0"){
-                $('#SAPButton').removeClass('hidden');
-            }else{
-                $('#SAPButton').addClass('hidden');
-            }
+            // SAP
+                if(is_SAP != "0"){
+                    $('#SAPButton').removeClass('hidden');
+                }else{
+                    $('#SAPButton').addClass('hidden');
+                }
+            // SAP
 
-            // $("meta[name='refresh_timer']").remove();
             $('meta[http-equiv="refresh"]').attr('content', '');
             $('#viewTicket').click();
 
-            var ticketUpdateHeight = $('.tUAutoHeight');
-            ticketUpdateHeight.css('height', 'auto');
-            ticketUpdateHeight.css('height', ticketUpdateHeight.prop('scrollHeight') + 'px');
-
-            var ticketResolution = $('.taAutoHeight');
-            ticketResolution.css('height', 'auto');
-            ticketResolution.css('height', ticketResolution.prop('scrollHeight') + 'px');
+            // Auto Height Textarea
+                var UpdateDivAutoHeight = $('.UpdateDivAutoHeight');
+                UpdateDivAutoHeight.css('height', 'auto');
+                UpdateDivAutoHeight.css('height', UpdateDivAutoHeight.prop('scrollHeight') + 'px');
+                
+                var ResolutionAutoHeight = $('.ResolutionAutoHeight');
+                ResolutionAutoHeight.css('height', 'auto');
+                ResolutionAutoHeight.css('height', ResolutionAutoHeight.prop('scrollHeight') + 'px');
+            // Auto Height Textarea
         });
 
         $('#SAPButton').click(function(){

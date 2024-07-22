@@ -37,16 +37,15 @@ class TicketController extends Controller
             $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
                 ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
                 ->where('department', $userDeptID)
-                ->orderBy('tickets.id', 'desc')
+                ->orderBy('status', 'desc')
                 ->limit(50)
                 ->get();
         }else{
             $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
-            ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
-            ->orderBy('id', 'desc')
-            ->orderBy('status', 'desc')
-            ->limit(50)
-            ->get();
+                ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
+                ->orderBy('status', 'desc')
+                ->limit(50)
+                ->get();
         }
 
         return view('ticketing.dashboard', compact('userDept', 'tickets', 'deptInCharge'));

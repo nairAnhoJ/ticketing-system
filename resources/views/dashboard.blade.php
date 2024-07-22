@@ -268,16 +268,26 @@
                         <th scope="col" class="sticky top-0 max-w-xs py-2 text-center">
                             SUBJECT
                         </th>
-                        {{-- <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
+                        <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
                             ASSIGNED TO
-                        </th> --}}
+                        </th>
                     </tr>
                 </thead>
                 <tbody id="ticketTableBody" style="max-height: calc(100% - 126px);">
                     @foreach ($tickets as $ticket)
                         <tr class="ticketsRows border-b border-gray-700 cursor-pointer {{ (strtotime($ticket->created_at) > strtotime("-1 day")) ? 'bg-emerald-500 hover:bg-emerald-600 opacity-80 text-black' : 'bg-gray-800 hover:bg-gray-700' }}">
                             <th scope="row" class="px-6 py-3 text-center">
-                                <span data-id="{{ $ticket->id }}" data-ticket_no="{{ $ticket->ticket_no }}" data-user="{{ $ticket->requestor->name }}" data-dept="{{ $ticket->departmentRow->name }}" data-date="{{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}" data-subject="{{ $ticket->subject }}" data-desc="{{ $ticket->description }}" data-status="{{ $ticket->status }}" data-src="{{ $ticket->attachment }}" data-reso="{{ $ticket->resolution }}">
+                                <span 
+                                    data-id="{{ $ticket->id }}"
+                                    data-ticket_no="{{ $ticket->ticket_no }}"
+                                    data-user="{{ $ticket->requestor->name }}"
+                                    data-dept="{{ $ticket->departmentRow->name }}"
+                                    data-date="{{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}"
+                                    data-subject="{{ $ticket->subject }}"
+                                    data-desc="{{ $ticket->description }}"
+                                    data-status="{{ $ticket->status }}"
+                                    data-src="{{ $ticket->attachment }}"
+                                    data-reso="{{ $ticket->resolution }}">
                                     {{ $ticket->ticket_no }}
                                 </span>
                             </th>
@@ -302,7 +312,7 @@
                                             echo 'text-teal-500';
                                         }
                                     @endphp
-                                 font-medium">
+                                font-medium">
                                     @php
                                         echo $status;
                                     @endphp
@@ -314,9 +324,9 @@
                             <td class="max-w-xs px-6 py-3 overflow-hidden font-medium text-center whitespace-nowrap">
                                 {{ $ticket->subject }}
                             </td>
-                            {{-- <td class="px-6 py-3 font-medium text-center whitespace-nowrap">
+                            <td class="px-6 py-3 font-medium text-center whitespace-nowrap">
                                 {{ $ticket->assigned['name'] }}
-                            </td> --}}
+                            </td>
                         </tr>
                     @endforeach
                     @if ($tickets->count() == 7)
@@ -374,7 +384,7 @@
                 
                 var src = $(this).find("span").data('src');
                 if(src != ""){
-                    var nsrc = `{{ asset('storage/${src}') }}`;
+                    var nsrc = `{{ asset('${src}') }}`;
                     $('#ticketAttachment').prop('src', nsrc);
                     $('#AttachedFileButton').removeClass('hidden');
                 }else{
