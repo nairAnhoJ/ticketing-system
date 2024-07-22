@@ -131,17 +131,23 @@
                                 </div>
                                 @if (auth()->user()->dept_id == $deptInCharge)
                                     <div id="ticketResolutionInputDiv">
-                                        <label for="ticketResolutionInput" class="block mt-5 mb-2 text-base font-medium text-white">
+                                        <label class="block mt-5 mb-2 text-base font-medium text-white">
                                             Resolution <span class="text-red-500 text-sm">*Required upon completion</span>
                                         </label>
-                                        <textarea required style="resize: none;" id="ticketResolutionInput" name="ticketResolution" rows=4 cols=50 maxlength=1000 class="block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                        <textarea style="resize: none;" id="ticketResolutionInput" name="ticketResolution" rows=4 cols=50 maxlength=1000 class="block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                        <div class="mt-5">
+                                            <label for="attachment" class="block text-sm font-medium text-white">Upload Attachment</label>
+                                            <div class="col-span-5">
+                                                <input id="attachment" name="attachment" class="block w-full h-10 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" type="file" accept="image/*">
+                                            </div>
+                                        </div>
                                     </div>
                                 @endif
                                 <div id="ticketResolutionDiv">
                                     <hr class="my-5">
                                     <label for="ticketResolution" class="block mb-2 text-base font-medium text-white">Resolution</label>
-                                    <textarea disabled style="max-height: 150px; resize: none;" id="ticketResolution" class="ResolutionAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700">
-                                    </textarea>
+                                    <textarea disabled style="max-height: 150px; resize: none;" id="ticketResolution" class="ResolutionAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700"></textarea>
+
                                 </div>
                             </div>
                         <!-- Modal footer -->
@@ -765,12 +771,22 @@
         });
 
         jQuery(document).on( "click", "#cancelButton", function(){
+            $('#loadingScreen').html(`<div wire:loading class="fixed top-0 bottom-0 left-0 right-0 z-50 flex flex-col items-center justify-center w-full h-screen overflow-hidden bg-gray-800 opacity-75">
+                <div class="w-12 h-12 mb-4 ease-linear border-4 border-t-4 border-gray-200 rounded-full loader"></div>
+                <h2 class="text-xl font-semibold text-center text-white">Processing...</h2>
+                <p class="w-1/3 text-center text-white">This may take a few seconds, please don't close this page.</p>
+            </div>`);
             $('#isCancel').val('1');
             $('#isUpdate').val('0');
             $('#statusUpdateForm').submit();
         });
 
         jQuery(document).on( "click", "#updateButton", function(){
+            $('#loadingScreen').html(`<div wire:loading class="fixed top-0 bottom-0 left-0 right-0 z-50 flex flex-col items-center justify-center w-full h-screen overflow-hidden bg-gray-800 opacity-75">
+                <div class="w-12 h-12 mb-4 ease-linear border-4 border-t-4 border-gray-200 rounded-full loader"></div>
+                <h2 class="text-xl font-semibold text-center text-white">Processing...</h2>
+                <p class="w-1/3 text-center text-white">This may take a few seconds, please don't close this page.</p>
+            </div>`);
             $('#isUpdate').val('1');
             $('#isCancel').val('0');
             $('#statusUpdateForm').submit();
