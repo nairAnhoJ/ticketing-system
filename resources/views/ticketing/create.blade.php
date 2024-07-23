@@ -31,7 +31,7 @@
         <h1 class="mb-3 text-3xl font-extrabold leading-none tracking-wide text-blue-500">CREATE NEW TICKET</h1>
         <form action="{{ route('ticket.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <label for="nature" class="block text-sm font-medium text-white">Nature of Problem</label>
+            <label for="nature" class="block text-sm font-medium text-white">Nature of Problem <span class="text-red-500 text-sm">*</span></label>
             <select required id="nature" name="nature" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">
                 @foreach ($cats as $cat)
                     <option hidden value=""></option>
@@ -46,12 +46,12 @@
             </div>
 
             <div class="mt-5">
-                <label for="subject" class="block text-sm font-medium text-white">Subject</label>
+                <label for="subject" class="block text-sm font-medium text-white">Subject <span class="text-red-500 text-sm">*</span></label>
                 <input required name="subject" id="subject" autocomplete="off" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">
             </div>
 
             <div class="mt-5">
-                <label for="description" class="block text-sm font-medium text-white">Description</label>
+                <label for="description" class="block text-sm font-medium text-white">Description <span class="text-red-500 text-sm">*</span></label>
                 <textarea required name="description" id="description" autocomplete="off" rows="5" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"></textarea>
             </div>
 

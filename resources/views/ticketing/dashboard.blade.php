@@ -115,8 +115,20 @@
                                 <p id="ticketSubject" class="mb-2 text-xl font-semibold leading-relaxed text-gray-300"></p>
                                 <div id="ticketDesc" class="mb-2 text-base leading-relaxed text-gray-300 whitespace-pre-line"></div>
                                 <div>
-                                    <button id="AttachedFileButton" data-modal-toggle="AttachedFileModal" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View Attached File</button>
-                                    <button id="SAPButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View SAP Business Partner</button>
+                                    <button id="AttachedFileButton" data-modal-toggle="AttachedFileModal" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                                        View Attached File
+                                    </button>
+                                    {{-- Resolution Attached File --}}
+                                        <button id="ResolutionAttachedFileButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                                            View/Download Attached File
+                                        </button>
+                                        <a id="ResolutionAttachedFileDownload" href="" download class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                                            View/Download Attached File
+                                        </a>
+                                    {{-- Resolution Attached File --}}
+                                    <button id="SAPButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                                        View SAP Business Partner
+                                    </button>
                                 </div>
                                 <div id="ticketUpdateDiv">
                                     <hr class="my-5">
@@ -138,7 +150,7 @@
                                         <div class="mt-5">
                                             <label for="attachment" class="block text-sm font-medium text-white">Upload Attachment</label>
                                             <div class="col-span-5">
-                                                <input id="attachment" name="attachment" class="block w-full h-10 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" type="file" accept="image/*">
+                                                <input id="attachment" name="attachment" class="block w-full h-10 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" type="file" accept=".jpg, .jpeg, .png, .gif, .pdf, .doc, .docx, .xls, .xlsx">
                                             </div>
                                         </div>
                                     </div>
@@ -173,7 +185,7 @@
                         <!-- Modal header -->
                         <div class="flex items-start justify-between p-4 border-b border-gray-600 rounded-t">
                             <h3 class="text-2xl font-semibold tracking-wide text-white">
-                                <span id="aticketNumber"></span>
+                                <span class="aticketNumber"></span>
                             </h3>
                             <button type="button" class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white" data-modal-toggle="AttachedFileModal">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
@@ -193,6 +205,38 @@
                 </div>
             </div>
         <!-- ======================================= Attached File modal ======================================= -->
+        
+        <!-- ======================================= Resolution Attached File modal ======================================= -->
+            <button id="OpenResolutionAttachedFileModal" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="ResolutionAttachedFileModal">
+            </button>
+
+            <div id="ResolutionAttachedFileModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+                <div class="relative w-full h-full max-w-6xl md:h-auto">
+                    <!-- Modal content -->
+                    <div class="relative text-sm bg-gray-700 rounded-lg shadow">
+                        <!-- Modal header -->
+                        <div class="flex items-start justify-between p-4 border-b border-gray-600 rounded-t">
+                            <h3 class="text-2xl font-semibold tracking-wide text-white">
+                                <span class="aticketNumber"></span>
+                            </h3>
+                            <button type="button" class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white" data-modal-toggle="ResolutionAttachedFileModal">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                            </button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="p-3 space-y-3">
+                            <div style="height: calc(100vh - 200px);">
+                                <img id="ticketResolutionAttachment" class="h-full mx-auto" src=""/>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="flex items-center p-3 space-x-3 border-t border-gray-600 rounded-b">
+                            <button data-modal-toggle="ResolutionAttachedFileModal" type="button" class="focus:ring-4 focus:outline-none rounded-lg border text-sm font-medium px-5 py-2.5 focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- ======================================= Resolution Attached File modal ======================================= -->
         
         <!-- ============================================== SAP modal ============================================== -->
             <button id="viewSAP" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="SAPModal">
@@ -440,6 +484,7 @@
                                         data-desc="{{ $ticket->description }}" 
                                         data-status="{{ $ticket->status }}" 
                                         data-src="{{ $ticket->attachment }}" 
+                                        data-resolution_attachment="{{ $ticket->resolution_attachment }}" 
                                         data-reso="{{ $ticket->resolution }}" 
                                         data-update="{{ $ticket->update }}">
                                         {{ $ticket->ticket_no }}
@@ -496,6 +541,8 @@
         var myID = {{ auth()->user()->id }};
         var myDept = {{ auth()->user()->dept_id }};
         var deptInCharge = {{ $deptInCharge }};
+        var resolution_attachment = '';
+        var resolution_file_extension = '';
         
         // Reload Page
             var delayTime = 90000;
@@ -543,6 +590,7 @@
                 var status = $(this).find("span").data('status');
                 var update = $(this).find("span").data('update');
                 var src = $(this).find("span").data('src');
+                resolution_attachment = $(this).find("span").data('resolution_attachment');
                 var reso = $(this).find("span").data('reso');
                 var is_SAP = $(this).find("span").data('is_sap');
             // Ticket Variables
@@ -550,7 +598,7 @@
             // Modal Display
                 $('#ticketID').val(id);
                 $('#ticketNumber').html(ticket_no);
-                $('#aticketNumber').html(ticket_no);
+                $('.aticketNumber').html(ticket_no);
                 $('#sticketNumber').html(ticket_no);
                 $('#ticketRequester').html(req);
                 $('#ticketDepartment').html(dept);
@@ -566,6 +614,23 @@
                     $('#AttachedFileButton').removeClass('hidden');
                 }else{
                     $('#AttachedFileButton').addClass('hidden');
+                }
+                
+                if(resolution_attachment != ""){
+                    var raSrc = `{{ asset('${resolution_attachment}') }}`;
+                    resolution_file_extension = raSrc.split('.').pop();
+                    if(resolution_file_extension == "jpg" || resolution_file_extension == "jpeg" || resolution_file_extension == "png"){
+                        $('#ticketResolutionAttachment').prop('src', raSrc);
+                        $('#ResolutionAttachedFileDownload').addClass('hidden');
+                        $('#ResolutionAttachedFileButton').removeClass('hidden');
+                    }else{
+                        $('#ResolutionAttachedFileDownload').prop('href', raSrc);
+                        $('#ResolutionAttachedFileDownload').removeClass('hidden');
+                        $('#ResolutionAttachedFileButton').addClass('hidden');
+                    }
+                }else{
+                    $('#ResolutionAttachedFileButton').addClass('hidden');
+                    $('#ResolutionAttachedFileDownload').addClass('hidden');
                 }
             // Attachment
             
@@ -790,6 +855,15 @@
             $('#isUpdate').val('1');
             $('#isCancel').val('0');
             $('#statusUpdateForm').submit();
+        });
+
+        $('#ResolutionAttachedFileButton').click(function(){
+            console.log(resolution_file_extension);
+            if(resolution_file_extension == "jpg" || resolution_file_extension == "jpeg" || resolution_file_extension == "png"){
+                $('#OpenResolutionAttachedFileModal').click();
+            }else{
+
+            }
         });
     });
   </script>

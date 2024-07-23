@@ -31,7 +31,7 @@ return new class extends Migration
             $table->dateTime('end_date_time')->nullable();
             $table->string('resolution_attachment', 100)->nullable();
 
-            // $table->integer('is_SAP');
+            $table->boolean('is_SAP');
             // $table->string('code', 20)->nullable();
             // $table->string('type', 50)->nullable();
             // $table->string('name')->nullable();

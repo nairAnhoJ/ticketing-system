@@ -38,12 +38,14 @@ class TicketController extends Controller
                 ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
                 ->where('department', $userDeptID)
                 ->orderBy('status', 'desc')
+                ->orderBy('id', 'desc')
                 ->limit(50)
                 ->get();
         }else{
             $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
                 ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
                 ->orderBy('status', 'desc')
+                ->orderBy('id', 'desc')
                 ->limit(50)
                 ->get();
         }
@@ -230,7 +232,6 @@ class TicketController extends Controller
     }
 
     public function update(Request $request){
-        dd($request);
         $id = $request->ticketID;
         $status = $request->ticketStatus;
         $ticketUpdate = date('F j, Y h:i A') . ' - ' . Auth::user()->name . "\n" . $request->ticketUpdate . "\n";
@@ -306,12 +307,20 @@ class TicketController extends Controller
                 $request->validate([
                     'ticketResolution' => 'required',
                 ]);
+                $attachment = $request->attachment;
+                
 
                 $ticket = Ticket::where('id', $id)->first();
                 $ticket->status = "DONE";
                 $ticket->done_by = auth()->user()->id;
                 $ticket->resolution = $request->ticketResolution;
-                
+                if($attachment != null){
+                    $filename = date('Ymd-His') . '-' . $ticket->ticket_no . '.' . $request->file('attachment')->getClientOriginalExtension();
+                    $path = "storage/attachments/";
+                    $attachment_path = $path . $filename;
+                    $request->file('attachment')->move(public_path($path), $filename);
+                    $ticket->resolution_attachment = $attachment_path;
+                }
                 $ticket->end_date_time = date('Y-m-d H:i:s');
                 $ticket->save();
             
