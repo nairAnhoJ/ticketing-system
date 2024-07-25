@@ -85,7 +85,7 @@
             @endif
         </div>
         
-        <!-- ========================================== Main modal ========================================== -->
+        <!--  View Ticket Modal  -->
             <button id="viewTicket" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="ticketModal">
             </button>
 
@@ -114,22 +114,24 @@
                             <div class="p-3">
                                 <p id="ticketSubject" class="mb-2 text-xl font-semibold leading-relaxed text-gray-300"></p>
                                 <div id="ticketDesc" class="mb-2 text-base leading-relaxed text-gray-300 whitespace-pre-line"></div>
-                                <div>
-                                    <button id="AttachedFileButton" data-modal-toggle="AttachedFileModal" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
-                                        View Attached File
-                                    </button>
-                                    {{-- Resolution Attached File --}}
-                                        <button id="ResolutionAttachedFileButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
-                                            View/Download Attached File
+                                {{-- Attachment Buttons --}}
+                                    <div>
+                                        <button id="AttachedFileButton" data-modal-toggle="AttachedFileModal" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                                            View Attached File
                                         </button>
-                                        <a id="ResolutionAttachedFileDownload" href="" download class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
-                                            View/Download Attached File
-                                        </a>
-                                    {{-- Resolution Attached File --}}
-                                    <button id="SAPButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
-                                        View SAP Business Partner
-                                    </button>
-                                </div>
+                                        {{-- Resolution Attached File --}}
+                                            <button id="ResolutionAttachedFileButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                                                View/Download Attached File
+                                            </button>
+                                            <a id="ResolutionAttachedFileDownload" href="" download class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                                                View/Download Attached File
+                                            </a>
+                                        {{-- Resolution Attached File --}}
+                                        <button id="SAPButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                                            View SAP Business Partner
+                                        </button>
+                                    </div>
+                                {{-- Attachment Buttons --}}
                                 <div id="ticketUpdateDiv">
                                     <hr class="my-5">
                                     <label for="ticketUpdateTextArea" class="block text-base font-medium text-white">Update</label>
@@ -159,7 +161,6 @@
                                     <hr class="my-5">
                                     <label for="ticketResolution" class="block mb-2 text-base font-medium text-white">Resolution</label>
                                     <textarea disabled style="max-height: 150px; resize: none;" id="ticketResolution" class="ResolutionAutoHeight w-full text-base leading-relaxed text-gray-300 bg-gray-700"></textarea>
-
                                 </div>
                             </div>
                         <!-- Modal footer -->
@@ -175,9 +176,9 @@
                     </form>
                 </div>
             </div>
-        <!-- ========================================== Main modal ========================================== -->
+        <!--  View Ticket Modal  -->
         
-        <!-- ======================================= Attached File modal ======================================= -->
+        <!--  Attached File modal  -->
             <div id="AttachedFileModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
                 <div class="relative w-full h-full max-w-6xl md:h-auto">
                     <!-- Modal content -->
@@ -204,9 +205,9 @@
                     </div>
                 </div>
             </div>
-        <!-- ======================================= Attached File modal ======================================= -->
+        <!--  Attached File modal  -->
         
-        <!-- ======================================= Resolution Attached File modal ======================================= -->
+        <!--  Resolution Attached File modal  -->
             <button id="OpenResolutionAttachedFileModal" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="ResolutionAttachedFileModal">
             </button>
 
@@ -236,9 +237,9 @@
                     </div>
                 </div>
             </div>
-        <!-- ======================================= Resolution Attached File modal ======================================= -->
+        <!--  Resolution Attached File modal  -->
         
-        <!-- ============================================== SAP modal ============================================== -->
+        <!--  SAP modal  -->
             <button id="viewSAP" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="SAPModal">
             </button>
 
@@ -399,7 +400,7 @@
                     </div>
                 </div>
             </div>
-        <!-- ============================================== SAP modal ============================================== -->
+        <!--  SAP modal  -->
 
 
         {{-- CONTROLS --}}
@@ -487,7 +488,7 @@
                                         data-resolution_attachment="{{ $ticket->resolution_attachment }}" 
                                         data-reso="{{ $ticket->resolution }}" 
                                         data-update="{{ $ticket->update }}">
-                                        {{ $ticket->ticket_no }}
+                                            {{ $ticket->ticket_no }}
                                     </span>
                                 </th>
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
@@ -559,23 +560,26 @@
         // Reload Page
 
 
-
-        $("#tableSearch").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("#ticketTableBody tr").filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        // Ticket Search
+            $("#tableSearch").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#ticketTableBody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
             });
-        });
+        // Ticket Search
 
-        if($('#ticketButton').length){
-            $('#ticketButton').click(function(){
-                $('#loadingScreen').html(`<div wire:loading class="fixed top-0 bottom-0 left-0 right-0 z-50 flex flex-col items-center justify-center w-full h-screen overflow-hidden bg-gray-800 opacity-75">
-                    <div class="w-12 h-12 mb-4 ease-linear border-4 border-t-4 border-gray-200 rounded-full loader"></div>
-                    <h2 class="text-xl font-semibold text-center text-white">Processing...</h2>
-                    <p class="w-1/3 text-center text-white">This may take a few seconds, please don't close this page.</p>
-                </div>`);
-            });
-        }
+        // Update Ticket Button
+            if($('#ticketButton').length){
+                $('#ticketButton').click(function(){
+                    $('#loadingScreen').html(`<div wire:loading class="fixed top-0 bottom-0 left-0 right-0 z-50 flex flex-col items-center justify-center w-full h-screen overflow-hidden bg-gray-800 opacity-75">
+                        <div class="w-12 h-12 mb-4 ease-linear border-4 border-t-4 border-gray-200 rounded-full loader"></div>
+                        <h2 class="text-xl font-semibold text-center text-white">Processing...</h2>
+                        <p class="w-1/3 text-center text-white">This may take a few seconds, please don't close this page.</p>
+                    </div>`);
+                });
+            }
+        // Update Ticket Button
 
         $('#ticketTableBody tr').click(function() {
             // Ticket Variables
@@ -605,6 +609,8 @@
                 $('#ticketDate').html(date);
                 $('#ticketSubject').html(subject);
                 $('#ticketDesc').html(desc);
+                $('#ticketStatus').val(status);
+                $('#ticketStatus2').html(status);
             // Modal Display
             
             // Attachment
@@ -634,8 +640,6 @@
                 }
             // Attachment
             
-            $('#ticketStatus').val(status);
-            $('#ticketStatus2').html(status);
 
             if(status == 'PENDING'){
                 // DIVS 
@@ -792,48 +796,50 @@
             // Auto Height Textarea
         });
 
-        $('#SAPButton').click(function(){
-            var ticketID = $('#ticketID').val();
-            var _token = $('input[name="_token"]').val();
-            
-            $.ajax({
-                url: "{{ route('sap.details') }}",
-                method: "POST",
-                dataType: 'json',
-                data: {
-                    ticketID: ticketID,
-                    _token: _token
-                },
-                success:function(result){
-                    $('#request').val(result.request);
-                    $('#remarks').val(result.description);
-                    $('#type').val(result.type);
-                    $('#code').val(result.code);
-                    $('#wtax_code').val(result.wtax_code);
-                    $('#AR_inCharge').val(result.AR_inCharge);
-                    $('#isOnHold').val(result.isOnHold);
-                    $('#AR_email').val(result.AR_email);
-                    $('#name').val(result.name);
-                    $('#isAutoEmail').val(result.isAutoEmail);
-                    $('#payment_terms').val(result.payment_terms);
-                    $('#billing_address').val(result.billing_address);
-                    $('#style').val(result.style);
-                    $('#shipping_address').val(result.shipping_address);
-                    $('#contact_name1').val(result.contact_name1);
-                    $('#contact_no1').val(result.contact_no1);
-                    $('#contact_email1').val(result.contact_email1);
-                    $('#tin').val(result.tin);
-                    $('#contact_name2').val(result.contact_name2);
-                    $('#contact_no2').val(result.contact_no2);
-                    $('#contact_email2').val(result.contact_email2);
-                    $('#sales_employee').val(result.sales_employee);
-                    $('#contact_name3').val(result.contact_name3);
-                    $('#contact_no3').val(result.contact_no3);
-                    $('#contact_email3').val(result.contact_email3);
-                    $('#viewSAP').click();
-                }
-            })
-        });
+        // View SAP
+            $('#SAPButton').click(function(){
+                var ticketID = $('#ticketID').val();
+                var _token = $('input[name="_token"]').val();
+                
+                $.ajax({
+                    url: "{{ route('sap.details') }}",
+                    method: "POST",
+                    dataType: 'json',
+                    data: {
+                        ticketID: ticketID,
+                        _token: _token
+                    },
+                    success:function(result){
+                        $('#request').val(result.request);
+                        $('#remarks').val(result.description);
+                        $('#type').val(result.type);
+                        $('#code').val(result.code);
+                        $('#wtax_code').val(result.wtax_code);
+                        $('#AR_inCharge').val(result.AR_inCharge);
+                        $('#isOnHold').val(result.isOnHold);
+                        $('#AR_email').val(result.AR_email);
+                        $('#name').val(result.name);
+                        $('#isAutoEmail').val(result.isAutoEmail);
+                        $('#payment_terms').val(result.payment_terms);
+                        $('#billing_address').val(result.billing_address);
+                        $('#style').val(result.style);
+                        $('#shipping_address').val(result.shipping_address);
+                        $('#contact_name1').val(result.contact_name1);
+                        $('#contact_no1').val(result.contact_no1);
+                        $('#contact_email1').val(result.contact_email1);
+                        $('#tin').val(result.tin);
+                        $('#contact_name2').val(result.contact_name2);
+                        $('#contact_no2').val(result.contact_no2);
+                        $('#contact_email2').val(result.contact_email2);
+                        $('#sales_employee').val(result.sales_employee);
+                        $('#contact_name3').val(result.contact_name3);
+                        $('#contact_no3').val(result.contact_no3);
+                        $('#contact_email3').val(result.contact_email3);
+                        $('#viewSAP').click();
+                    }
+                })
+            });
+        // View SAP
 
         jQuery(document).on( "click", "#cancelButton", function(){
             $('#loadingScreen').html(`<div wire:loading class="fixed top-0 bottom-0 left-0 right-0 z-50 flex flex-col items-center justify-center w-full h-screen overflow-hidden bg-gray-800 opacity-75">
@@ -861,8 +867,6 @@
             console.log(resolution_file_extension);
             if(resolution_file_extension == "jpg" || resolution_file_extension == "jpeg" || resolution_file_extension == "png"){
                 $('#OpenResolutionAttachedFileModal').click();
-            }else{
-
             }
         });
     });

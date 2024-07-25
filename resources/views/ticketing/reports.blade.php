@@ -1,6 +1,6 @@
 <x-app-layout>
     @section('title')
-    HR Ticketing
+        HR Ticketing
     @endsection
     <style>
         /* width */
@@ -143,6 +143,14 @@
                         <div id="ticketDesc" class="mb-2 text-base leading-relaxed text-gray-300 whitespace-pre-line"></div>
                         <div>
                             <button id="AttachedFileButton" data-modal-toggle="AttachedFileModal" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View Attached File</button>
+                            {{-- Resolution Attached File --}}
+                                <button id="ResolutionAttachedFileButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                                    View/Download Attached File
+                                </button>
+                                <a id="ResolutionAttachedFileDownload" href="" download class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                                    View/Download Attached File
+                                </a>
+                            {{-- Resolution Attached File --}}
                             <button id="SAPButton" type="button" class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">View SAP Business Partner</button>
                         </div>
                         <div id="ticketUpdate"></div>
@@ -199,6 +207,40 @@
                 </div>
             </div>
         </div>
+        
+        
+        <!-- ======================================= Resolution Attached File modal ======================================= -->
+            <button id="OpenResolutionAttachedFileModal" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="ResolutionAttachedFileModal">
+            </button>
+
+            <div id="ResolutionAttachedFileModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+                <div class="relative w-full h-full max-w-6xl md:h-auto">
+                    <!-- Modal content -->
+                    <div class="relative text-sm bg-gray-700 rounded-lg shadow">
+                        <!-- Modal header -->
+                        <div class="flex items-start justify-between p-4 border-b border-gray-600 rounded-t">
+                            <h3 class="text-2xl font-semibold tracking-wide text-white">
+                                <span class="aticketNumber"></span>
+                            </h3>
+                            <button type="button" class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white" data-modal-toggle="ResolutionAttachedFileModal">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                            </button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="p-3 space-y-3">
+                            <div style="height: calc(100vh - 200px);">
+                                <img id="ticketResolutionAttachment" class="h-full mx-auto" src=""/>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="flex items-center p-3 space-x-3 border-t border-gray-600 rounded-b">
+                            <button data-modal-toggle="ResolutionAttachedFileModal" type="button" class="focus:ring-4 focus:outline-none rounded-lg border text-sm font-medium px-5 py-2.5 focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- ======================================= Resolution Attached File modal ======================================= -->
+
         
         <!-- ========================================================= SAP modal ========================================================= -->
         <button id="viewSAP" class="hidden text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button" data-modal-toggle="SAPModal">
@@ -475,54 +517,67 @@
                     </tr>
                 </thead>
                 <tbody id="ticketTableBody" style="max-height: calc(100% - 126px);">
-                  @foreach ($tickets as $ticket)
-                      <tr class="bg-gray-800 border-gray-700 cursor-pointer hover:bg-gray-700">
-                          <th scope="row" class="px-6 py-3 font-medium text-center text-white">
-                              <span data-id="{{ $ticket->id }}" data-ticket_no="{{ $ticket->ticket_no }}" data-is_SAP="{{ $ticket->is_SAP }}" data-user="{{ $ticket->user }}" data-dept="{{ $ticket->dept }}" data-date="{{ date("M d, Y", strtotime($ticket->created_at)) }}" data-subject="{{ $ticket->subject }}" data-desc="{{ $ticket->description }}" data-status="{{ $ticket->status }}" data-src="{{ $ticket->attachment }}" data-reso="{{ $ticket->resolution }}" data-update="{{ $ticket->update }}">
-                                  {{ $ticket->ticket_no }}
-                              </span>
-                          </th>
-                          <td class="px-6 py-3 text-center whitespace-nowrap">
-                              {{ $ticket->user }}
-                          </td>
-                          <td class="px-6 py-3 text-center whitespace-nowrap">
-                              {{ $ticket->dept }}
-                          </td>
-                          <td class="px-6 py-3 text-center whitespace-nowrap">
-                              {{ date("M d, Y", strtotime($ticket->created_at)) }}
-                          </td>
-                          <td class="px-6 py-3 text-center whitespace-nowrap">
-                              {{ $ticket->nature_of_problem }}
-                          </td>
-                          <td class="px-6 py-3 text-center whitespace-nowrap">
-                              {{ $ticket->subject }}
-                          </td>
-                          <td class="px-6 py-3 text-center whitespace-nowrap">
-                              {{ $ticket->assigned_to }}
-                          </td>
-                          <td class="px-6 py-3 text-center whitespace-nowrap">
-                              {{ $ticket->done_by }}
-                          </td>
-                          <td class="px-6 py-3 text-center whitespace-nowrap">
-                              <span class="
-                                  @php
-                                      $status = $ticket->status;
-                                      if($status == 'PENDING'){
-                                          echo 'text-red-500';
-                                      }elseif($status == 'ONGOING'){
-                                          echo 'text-amber-300';
-                                      }elseif($status == 'DONE'){
-                                          echo 'text-teal-500';
-                                      }
-                                  @endphp
-                              ">
-                                  @php
-                                      echo $status;
-                                  @endphp
-                              </span>
-                          </td>
-                      </tr>
-                  @endforeach
+                    @foreach ($tickets as $ticket)
+                        <tr class="bg-gray-800 border-gray-700 cursor-pointer hover:bg-gray-700">
+                            <th scope="row" class="px-6 py-3 font-medium text-center text-white">
+                                <span 
+                                    data-id="{{ $ticket->id }}" 
+                                    data-ticket_no="{{ $ticket->ticket_no }}" 
+                                    data-is_SAP="{{ $ticket->is_SAP }}" 
+                                    data-user="{{ $ticket->user }}" 
+                                    data-dept="{{ $ticket->dept }}" 
+                                    data-date="{{ date("M d, Y", strtotime($ticket->created_at)) }}" 
+                                    data-subject="{{ $ticket->subject }}" 
+                                    data-desc="{{ $ticket->description }}" 
+                                    data-status="{{ $ticket->status }}" 
+                                    data-src="{{ $ticket->attachment }}" 
+                                    data-resolution_attachment="{{ $ticket->resolution_attachment }}" 
+                                    data-reso="{{ $ticket->resolution }}" 
+                                    data-update="{{ $ticket->update }}">
+                                        {{ $ticket->ticket_no }}
+                                </span>
+                            </th>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ $ticket->user }}
+                            </td>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ $ticket->dept }}
+                            </td>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ date("M d, Y", strtotime($ticket->created_at)) }}
+                            </td>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ $ticket->nature_of_problem }}
+                            </td>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ $ticket->subject }}
+                            </td>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ $ticket->assigned_to }}
+                            </td>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                {{ $ticket->done_by }}
+                            </td>
+                            <td class="px-6 py-3 text-center whitespace-nowrap">
+                                <span class="
+                                    @php
+                                        $status = $ticket->status;
+                                        if($status == 'PENDING'){
+                                            echo 'text-red-500';
+                                        }elseif($status == 'ONGOING'){
+                                            echo 'text-amber-300';
+                                        }elseif($status == 'DONE'){
+                                            echo 'text-teal-500';
+                                        }
+                                    @endphp
+                                ">
+                                    @php
+                                        echo $status;
+                                    @endphp
+                                </span>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -532,6 +587,8 @@
 
     <script>
         $(document).ready(function(){
+            var resolution_attachment = '';
+            var resolution_file_extension = '';
             $("#tableSearch").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("#ticketTableBody tr").filter(function() {
@@ -575,11 +632,29 @@
                 
                 var src = $(this).find("span").data('src');
                 if(src != ""){
-                    var nsrc = `{{ asset('storage/${src}') }}`;
+                    var nsrc = `{{ asset('${src}') }}`;
                     $('#ticketAttachment').prop('src', nsrc);
                     $('#AttachedFileButton').removeClass('hidden');
                 }else{
                     $('#AttachedFileButton').addClass('hidden');
+                }
+                
+                resolution_attachment = $(this).find("span").data('resolution_attachment');
+                if(resolution_attachment != ""){
+                    var raSrc = `{{ asset('${resolution_attachment}') }}`;
+                    resolution_file_extension = raSrc.split('.').pop();
+                    if(resolution_file_extension == "jpg" || resolution_file_extension == "jpeg" || resolution_file_extension == "png"){
+                        $('#ticketResolutionAttachment').prop('src', raSrc);
+                        $('#ResolutionAttachedFileDownload').addClass('hidden');
+                        $('#ResolutionAttachedFileButton').removeClass('hidden');
+                    }else{
+                        $('#ResolutionAttachedFileDownload').prop('href', raSrc);
+                        $('#ResolutionAttachedFileDownload').removeClass('hidden');
+                        $('#ResolutionAttachedFileButton').addClass('hidden');
+                    }
+                }else{
+                    $('#ResolutionAttachedFileButton').addClass('hidden');
+                    $('#ResolutionAttachedFileDownload').addClass('hidden');
                 }
                 
                 var status = $(this).find("span").data('status');
@@ -688,80 +763,6 @@
                 ticketResolution.css('height', ticketResolution.prop('scrollHeight') + 'px');
             });
 
-            // $('#ticketTableBody tr').click(function() {
-            //     var id = $(this).find("span").data('id');
-            //     $('#ticketID').val(id);
-
-            //     var ticket_no = $(this).find("span").data('ticket_no');
-            //     $('#ticketNumber').html(ticket_no);
-            //     $('#aticketNumber').html(ticket_no);
-
-            //     var req = $(this).find("span").data('user');
-            //     $('#ticketRequester').html(req);
-
-            //     var dept = $(this).find("span").data('dept');
-            //     $('#ticketDepartment').html(dept);
-                
-            //     var date = $(this).find("span").data('date');
-            //     $('#ticketDate').html(date);
-                
-            //     var subject = $(this).find("span").data('subject');
-            //     $('#ticketSubject').html(subject);
-                
-            //     var desc = $(this).find("span").data('desc');
-            //     $('#ticketDesc').html(desc);
-                
-            //     var src = $(this).find("span").data('src');
-            //     if(src != ""){
-            //         var nsrc = `{{ asset('storage/${src}') }}`;
-            //         $('#ticketAttachment').prop('src', nsrc);
-            //         $('#AttachedFileButton').removeClass('hidden');
-            //     }else{
-            //         $('#AttachedFileButton').addClass('hidden');
-            //     }
-                
-            //     var status = $(this).find("span").data('status');
-            //     $('#ticketStatus').val(status);
-            //     $('#ticketStatus2').html(status);
-            //     if(status == 'PENDING'){
-            //         if($('#ticketButton').length){
-            //             $('#ticketButton').removeClass('hidden');
-            //             $('#ticketButton').html('Mark as ONGOING');
-            //         }
-            //         $('#ticketResolutionInput').html('');
-            //         $('#ticketResolutionDiv').html('');
-            //         $('#ticketStatus2').removeClass('text-amber-300');
-            //         $('#ticketStatus2').removeClass('text-teal-500');
-            //         $('#ticketStatus2').addClass('text-red-500');
-            //     }else if(status == 'ONGOING'){
-            //         if($('#ticketButton').length){
-            //             $('#ticketButton').removeClass('hidden');
-            //             $('#ticketButton').html('Mark as DONE');
-            //         }
-            //         $('#ticketResolutionDiv').html('');
-            //         $('#ticketResolutionInput').html(`<hr class="my-5">
-            //                                         <label for="ticketResolution" class="block mb-2 text-sm font-medium text-white">Resolution</label>
-            //                                         <textarea style="resize: none;" id="ticketResolution" name="ticketResolution" rows="4" class="block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"></textarea>`);
-            //         $('#ticketStatus2').removeClass('text-red-500');
-            //         $('#ticketStatus2').removeClass('text-teal-500');
-            //         $('#ticketStatus2').addClass('text-amber-300');
-            //     }else if(status == 'DONE'){
-            //         var reso = $(this).find("span").data('reso');
-            //         if($('#ticketButton').length){
-            //             $('#ticketButton').addClass('hidden');
-            //         }
-            //         $('#ticketResolutionInput').html('');
-            //         $('#ticketResolutionDiv').html(`<hr class="my-5">
-            //                                         <label for="ticketResolution" class="block mb-2 text-base font-medium text-white">Resolution</label>
-            //                                         <h2 id="ticketResolution" class="text-base leading-relaxed text-gray-300">${reso}</h2>`);
-            //         $('#ticketStatus2').removeClass('text-red-500');
-            //         $('#ticketStatus2').removeClass('text-amber-300');
-            //         $('#ticketStatus2').addClass('text-teal-500');
-            //     }
-
-            //     $('#viewTicket').click();
-            // });
-
             $('#SAPButton').click(function(){
                 var ticketID = $('#ticketID').val();
                 var _token = $('input[name="_token"]').val();
@@ -803,6 +804,15 @@
                         $('#viewSAP').click();
                     }
                 })
+            });
+
+            $('#ResolutionAttachedFileButton').click(function(){
+                console.log(resolution_file_extension);
+                if(resolution_file_extension == "jpg" || resolution_file_extension == "jpeg" || resolution_file_extension == "png"){
+                    $('#OpenResolutionAttachedFileModal').click();
+                }else{
+
+                }
             });
         });
     </script>

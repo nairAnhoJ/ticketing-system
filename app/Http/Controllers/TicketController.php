@@ -309,7 +309,6 @@ class TicketController extends Controller
                 ]);
                 $attachment = $request->attachment;
                 
-
                 $ticket = Ticket::where('id', $id)->first();
                 $ticket->status = "DONE";
                 $ticket->done_by = auth()->user()->id;
@@ -406,6 +405,7 @@ class TicketController extends Controller
                 'tickets.created_at',
                 'tickets.attachment',
                 'tickets.resolution',
+                'tickets.resolution_attachment',
                 'tickets.update'
             )
             ->join('users AS u', 'tickets.user_id', '=', 'u.id')
@@ -478,6 +478,7 @@ class TicketController extends Controller
                 'tickets.created_at',
                 'tickets.attachment',
                 'tickets.resolution',
+                'tickets.resolution_attachment',
                 'tickets.update'
             )
             ->join('users AS u', 'tickets.user_id', '=', 'u.id')
