@@ -20,6 +20,7 @@
         <script src="https://cdn.ckeditor.com/ckeditor5/38.1.1/classic/ckeditor.js"></script>
         <script src="https://unpkg.com/flowbite@1.6.0/dist/flowbite.min.js"></script>
         <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased overflow-x-hidden">

@@ -40,7 +40,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if(!auth()->user()){
-        return view('auth.login');
+        $deptInCharge = DeptInCharge::with('department')->where('id', 1)->first();
+        
+        return view('auth.login', compact('deptInCharge'));
     }else{
         return redirect()->route('dashboard');
     }
@@ -53,6 +55,7 @@ Route::get('/dashboard', function () {
     $userDept = '';
     $deptInCharge = '';
 
+    $userID = Auth::user()->id;
     $userDeptID = auth()->user()->dept_id;
     $userDeptRow = DB::table('departments')->where('id', $userDeptID)->first();
     if($userDeptRow != null){
@@ -72,12 +75,12 @@ Route::get('/dashboard', function () {
         $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
             ->whereIn('status', ['PENDING', 'ONGOING'])
             ->where('department', $userDeptID)
+            ->where('user_id', $userID)
             ->orderBy('tickets.id', 'desc')
             ->limit(7)
             ->get();
 
 
-        $userID = Auth::user()->id;
 
         $ticketReq = Ticket::where('user_id', $userID)
             ->whereIn('status', ['PENDING', 'ONGOING'])

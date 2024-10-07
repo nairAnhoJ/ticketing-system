@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DeptInCharge;
 use App\Models\Ticket;
 use App\Models\TicketCategory;
 use App\Models\User;
+use Carbon\Carbon;
+use DateInterval;
+use DatePeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +21,7 @@ use PHPMailer\PHPMailer\Exception;
 class TicketController extends Controller
 {
     public function index(){
-        $userID = auth()->user()->id;
+        $userID = Auth::user()->id;
         $userDeptID = auth()->user()->dept_id;
         $userRow = DB::table('users')->where('id', $userID)->first();
 
@@ -28,7 +32,7 @@ class TicketController extends Controller
         if($userDeptRow != null){
             $userDept = $userDeptRow->name;
         }
-        $deptInChargeRow = DB::table('dept_in_charges')->where('id', 1)->first();
+        $deptInChargeRow = DeptInCharge::with('department')->where('id', 1)->first();
         if($deptInChargeRow != null){
             $deptInCharge = $deptInChargeRow->dept_id;
         }
@@ -37,6 +41,7 @@ class TicketController extends Controller
             $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
                 ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
                 ->where('department', $userDeptID)
+                ->where('user_id', $userID)
                 ->orderBy('status', 'desc')
                 ->orderBy('id', 'desc')
                 ->limit(50)
@@ -50,7 +55,7 @@ class TicketController extends Controller
                 ->get();
         }
 
-        return view('ticketing.dashboard', compact('userDept', 'tickets', 'deptInCharge'));
+        return view('ticketing.dashboard', compact('userDept', 'tickets', 'deptInCharge', 'deptInChargeRow'));
     }
 
     public function create(){
@@ -387,6 +392,36 @@ class TicketController extends Controller
         $dateTo = date('Y-m-d').' 23:59:59';
         $newDateTo = date("Y-m-d H:i:s", strtotime($dateTo));
 
+        $start = Carbon::parse($newDateFrom);
+        $end = Carbon::parse($newDateTo);
+
+        // Create DatePeriod object
+        $interval = new DateInterval('P1D'); // 1 Day interval
+        $period = new DatePeriod($start, $interval, $end->addDay());
+
+        $dates = [];
+
+        // Loop through the DatePeriod object and format each date
+        foreach ($period as $date) {
+            $dates[] = $date->format('Y-m-d');
+        }
+
+        $ticketsPerDayQuery = Ticket::selectRaw('DATE(created_at) as date, COUNT(*) as total_tickets')
+            ->whereBetween('created_at', [$start, $end])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $ticketsPerDay = [];
+        for ($date = $start; $date->lte($end); $date->addDay()) {
+            $ticketsPerDay[$date->format('Y-m-d')] = 0; // Set default ticket count to 0 for each day
+        }
+
+        // Now merge the results from the query into the $ticketsPerDay array
+        foreach ($ticketsPerDayQuery as $ticket) {
+            $ticketsPerDay[$ticket->date] = $ticket->total_tickets;
+        }
+
         // $tickets = DB::select("SELECT tickets.id, tickets.ticket_no, u.name AS user, departments.name AS dept, ticket_categories.name AS nature_of_problem, a.name AS assigned_to, tickets.subject, tickets.description, tickets.status, tickets.created_at, tickets.attachment, tickets.resolution FROM tickets INNER JOIN users AS u ON tickets.user_id = u.id INNER JOIN departments ON tickets.department = departments.id INNER JOIN users AS a ON tickets.assigned_to = a.id INNER JOIN ticket_categories ON tickets.nature_of_problem = ticket_categories.id WHERE tickets.created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME) AND tickets.status != 'CANCELLED' ORDER BY tickets.id DESC", [$newDateFrom, $newDateTo]);
 
         $tickets = DB::table('tickets')
@@ -424,7 +459,7 @@ class TicketController extends Controller
         $done = (DB::select("SELECT COUNT(id) AS count FROM tickets WHERE status = 'DONE' AND created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME)", [$newDateFrom, $newDateTo]))[0]->count;
 
 
-        return view('ticketing.reports', compact('tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF'));
+        return view('ticketing.reports', compact('tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF', 'dates', 'ticketsPerDay'));
     }
     
     public function genReport(Request $request){
@@ -444,6 +479,36 @@ class TicketController extends Controller
         $userfilter = "";
         if($userF != 0){
             $userfilter = " AND tickets.done_by = ".$userF;
+        }
+
+        $start = Carbon::parse($newDateFrom);
+        $end = Carbon::parse($newDateTo);
+
+        // Create DatePeriod object
+        $interval = new DateInterval('P1D'); // 1 Day interval
+        $period = new DatePeriod($start, $interval, $end->addDay());
+
+        $dates = [];
+
+        // Loop through the DatePeriod object and format each date
+        foreach ($period as $date) {
+            $dates[] = $date->format('Y-m-d');
+        }
+
+        $ticketsPerDayQuery = Ticket::selectRaw('DATE(created_at) as date, COUNT(*) as total_tickets')
+            ->whereBetween('created_at', [$start, $end])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $ticketsPerDay = [];
+        for ($date = $start; $date->lte($end); $date->addDay()) {
+            $ticketsPerDay[$date->format('Y-m-d')] = 0; // Set default ticket count to 0 for each day
+        }
+
+        // Now merge the results from the query into the $ticketsPerDay array
+        foreach ($ticketsPerDayQuery as $ticket) {
+            $ticketsPerDay[$ticket->date] = $ticket->total_tickets;
         }
 
         $categoryF = $request->category;
@@ -537,6 +602,8 @@ class TicketController extends Controller
         $total = count($tickets);
 
 
-        return view('ticketing.reports', compact('tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF'));
+
+
+        return view('ticketing.reports', compact('tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF', 'dates', 'ticketsPerDay'));
     }
 }

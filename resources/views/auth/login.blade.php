@@ -4,10 +4,13 @@
     @endsection
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/">
+            <div class="text-white text-center text-3xl font-bold mb-5">
+                {{ $deptInCharge->department->name }} TICKETING SYSTEM
+            </div>
+            <div class="flex justify-center">
                 <img src="{{ asset('storage\images\logo\logo.png') }}" class="block h-auto w-60" alt="">
                 {{-- <x-application-logo class="w-20 h-20 text-gray-200 fill-current" /> --}}
-            </a>
+            </div>
         </x-slot>
 
         <!-- Session Status -->

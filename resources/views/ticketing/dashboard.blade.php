@@ -77,11 +77,17 @@
     <div id="loadingScreen"></div>
 
     <div style="height: calc(100vh - 65px);" class="w-screen p-3 text-gray-200">
-        <div class="grid grid-cols-2 items-center mb-1.5">
-            <h1 class="text-3xl font-extrabold leading-none tracking-wide text-blue-500">TICKETING</h1>
+        <div class="flex items-center justify-between mb-1.5">
+            <h1 class="text-3xl font-extrabold leading-none tracking-wide text-blue-500">{{ $deptInChargeRow->department->name }} TICKETING</h1>
             
+            {{-- <div class="text-white text-center text-3xl font-bold mb-5">
+                HR TICKETING SYSTEM
+            </div> --}}
+
             @if (auth()->user()->dept_id == $deptInCharge)
-            <a href="{{ route('ticket.reports') }}" type="button" class="justify-self-end w-48 text-white text-center focus:ring-4 font-medium rounded-lg text-sm px-5 py-1.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Ticket Report</a>
+                <a href="{{ route('ticket.reports') }}" type="button" class="justify-self-end w-48 text-white text-center focus:ring-4 font-medium rounded-lg text-sm px-5 py-1.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Ticket Report</a>
+            @else
+                <div class="w-48"></div>
             @endif
         </div>
         
@@ -453,11 +459,16 @@
                                 DEPARTMENT
                             </th>
                             <th scope="col" class="sticky top-0 py-2 text-center">
-                                DATE CREATED
+                                DATE/TIME CREATED
                             </th>
                             <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
                                 STATUS
                             </th>
+                            @if (auth()->user()->dept_id == $deptInCharge)
+                                <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
+                                    ELAPSED TIME
+                                </th>
+                            @endif
                             <th scope="col" class="sticky top-0 py-2 text-center">
                                 NATURE OF PROBLEM
                             </th>
@@ -471,7 +482,16 @@
                     </thead>
                     <tbody id="ticketTableBody" style="max-height: calc(100% - 126px);">
                         @foreach ($tickets as $ticket)
-                            <tr class="bg-gray-800 border-gray-700 hover:bg-gray-700 cursor-pointer {{ (strtotime($ticket->created_at) > strtotime("-1 day")) ? 'text-green-500' : '' }}">
+                            <tr class="bg-gray-800 border-gray-700 hover:bg-gray-700 cursor-pointer
+                                @php
+                                    $status = $ticket->status;
+                                    if(strtotime($ticket->created_at) > strtotime("-1 day")){
+                                        echo 'text-green-500';
+                                    }else if($status == 'PENDING' || $status == 'ONGOING'){
+                                        echo 'text-red-500';
+                                    }
+                                @endphp
+                            {{ (strtotime($ticket->created_at) > strtotime("-1 day")) ? 'text-green-500' : '' }}">
                                 <th scope="row" class="px-6 py-3 font-medium text-center text-white">
                                     <span 
                                         data-id="{{ $ticket->id }}" 
@@ -483,7 +503,7 @@
                                         data-date="{{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}" 
                                         data-subject="{{ $ticket->subject }}" 
                                         data-desc="{{ $ticket->description }}" 
-                                        data-status="{{ $ticket->status }}" 
+                                        data-status="{{ $status }}" 
                                         data-src="{{ $ticket->attachment }}" 
                                         data-resolution_attachment="{{ $ticket->resolution_attachment }}" 
                                         data-reso="{{ $ticket->resolution }}" 
@@ -503,16 +523,23 @@
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
                                     <span class="
                                         @php
-                                            $status = $ticket->status;
                                             if($status == 'PENDING'){
+                                                $currentDateTime = new DateTime();
                                                 echo 'text-red-500';
                                             }elseif($status == 'ONGOING'){
+                                                $currentDateTime = new DateTime();
                                                 echo 'text-amber-300';
                                             }elseif($status == 'DONE'){
+                                                $currentDateTime = new DateTime($ticket->end_date_time);
                                                 echo 'text-teal-500';
                                             }elseif($status == 'CANCELLED'){
                                                 echo 'text-neutral-300';
                                             }
+                                            $createdDateTime = new DateTime($ticket->created_at);
+                                            $interval = $createdDateTime->diff($currentDateTime);
+                                            $months = $interval->m;
+                                            $days = $interval->d;
+                                            $hours = $interval->h;
                                         @endphp
                                     ">
                                         @php
@@ -520,6 +547,33 @@
                                         @endphp
                                     </span>
                                 </td>
+                                @if (auth()->user()->dept_id == $deptInCharge)
+                                    <td class="px-6 py-3 text-center whitespace-nowrap">
+                                        @if ($status == 'ONGOING' || $status == 'PENDING' || $status == 'DONE')
+                                            @php
+                                                $labelMonth = ' Months ';
+                                                $labelDay = ' Days ';
+                                                $labelHour = ' Hours ';
+                                                if($months == 1){
+                                                    $labelMonth = ' Month ';
+                                                }
+                                                if ($days == 1) {
+                                                    $labelDay = ' Day ';
+                                                }
+                                                if ($hours == 1) {
+                                                    $labelHour = ' Hour ';
+                                                }
+                                            @endphp
+                                            @if ($months != 0)
+                                                {{ $months . $labelMonth . $days . $labelDay . $hours . $labelHour }}
+                                            @elseif ($days != 0)
+                                                {{ $days . $labelDay . $hours . $labelHour }}
+                                            @else
+                                                {{ $hours . $labelHour }}
+                                            @endif
+                                        @endif
+                                    </td>
+                                @endif
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
                                     {{ $ticket->category['name'] }}
                                 </td>
