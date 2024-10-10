@@ -406,6 +406,53 @@ class TicketController extends Controller
             $dates[] = $date->format('Y-m-d');
         }
 
+        $averageTimes = Ticket::select('done_by',
+            DB::raw('AVG(TIMESTAMPDIFF(HOUR, created_at, start_date_time)) as avg_response_time'),
+            DB::raw('AVG(TIMESTAMPDIFF(HOUR, created_at, end_date_time)) as avg_resolution_time')
+        )
+        ->whereBetween('created_at', [$start, $end])
+        ->groupBy('done_by')
+        ->get();
+
+        $colorsArray = [
+            "169,197,160",  // Celadon
+            "255,248,240",  // Floral White
+            "158,43,37",    // Auburn
+            "171,146,191",  // African Violet
+            "115,108,237",  // Medium Slate Blue
+            "101,82,77",    // Wenge
+            "127,194,155",  // Cambridge Blue
+            "115,75,94",    // Eggplant
+            "229,220,194",  // Pearl
+            "213,87,59",    // Jasper
+            "5,142,63",     // Forest Green
+            "63,124,172",   // Steel BLue
+            "248,90,62",    // Tomato
+            "225,230,225",  // Platinum
+            "242,95,92",    // Bittersweet
+            "255,87,159",   // Brilliant Rose
+        ];
+        $usersInCharge = [];
+        $usersColor = [];
+        $usersBorderColor = [];
+        $avgResponseTime = [];
+        $avgResolutionTime = [];
+        foreach ($users as $index => $user) {
+            $usersInCharge[] = $user->name;
+            foreach($averageTimes as $averageTime){
+                if($averageTime->done_by == $user->id){
+                    $avgResponseTime[] = round($averageTime->avg_response_time, 2);
+                    $avgResolutionTime[] = round($averageTime->avg_resolution_time, 2);
+                }else{
+                    $avgResponseTime[] = 0;
+                    $avgResolutionTime[] = 0;
+                }
+            }
+            
+            $usersColor[] = "rgba($colorsArray[$index], 0.4)";
+            $usersBorderColor[] = "rgba($colorsArray[$index])";
+        }
+
         $ticketsPerDayQuery = Ticket::selectRaw('DATE(created_at) as date, COUNT(*) as total_tickets')
             ->whereBetween('created_at', [$start, $end])
             ->groupBy('date')
@@ -459,17 +506,17 @@ class TicketController extends Controller
         $done = (DB::select("SELECT COUNT(id) AS count FROM tickets WHERE status = 'DONE' AND created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME)", [$newDateFrom, $newDateTo]))[0]->count;
 
 
-        return view('ticketing.reports', compact('tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF', 'dates', 'ticketsPerDay'));
+        return view('ticketing.reports', compact('usersInCharge', 'usersColor', 'usersBorderColor', 'avgResponseTime', 'avgResolutionTime', 'tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF', 'dates', 'ticketsPerDay'));
     }
     
     public function genReport(Request $request){
         $deptInCharge = (DB::table('dept_in_charges')->where('id', 1)->first())->dept_id;
-        $users = DB::select('SELECT * FROM users WHERE dept_id = ? AND id != ?', [$deptInCharge, 1]);
+        $users = User::where('dept_id', $deptInCharge)->where('id', '!=', 1)->orderBy('name', 'asc')->get();
+        // $users = DB::select('SELECT * FROM users WHERE dept_id = ? AND id != ?', [$deptInCharge, 1]);
         $cats = DB::table('ticket_categories')->orderBy('name', 'desc')->get();
 
         $inputDateFrom = $request->dateFrom;
         $inputDateTo = $request->dateTo;
-
 
         $dateFrom = $request->dateFrom.' 00:00:00.000';
         $newDateFrom = date("Y-m-d H:i:s", strtotime($dateFrom));
@@ -493,6 +540,56 @@ class TicketController extends Controller
         // Loop through the DatePeriod object and format each date
         foreach ($period as $date) {
             $dates[] = $date->format('Y-m-d');
+        }
+
+        $averageTimes = Ticket::select('done_by',
+            DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, start_date_time)) as avg_response_time'),
+            DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, end_date_time)) as avg_resolution_time')
+        )
+        ->whereBetween('created_at', [$start, $end])
+        ->groupBy('done_by')
+        ->get();
+
+        $colorsArray = [
+            "169,197,160",  // Celadon
+            "255,248,240",  // Floral White
+            "158,43,37",    // Auburn
+            "171,146,191",  // African Violet
+            "115,108,237",  // Medium Slate Blue
+            "101,82,77",    // Wenge
+            "127,194,155",  // Cambridge Blue
+            "115,75,94",    // Eggplant
+            "229,220,194",  // Pearl
+            "213,87,59",    // Jasper
+            "5,142,63",     // Forest Green
+            "63,124,172",   // Steel BLue
+            "248,90,62",    // Tomato
+            "225,230,225",  // Platinum
+            "242,95,92",    // Bittersweet
+            "255,87,159",   // Brilliant Rose
+        ];
+        $usersInCharge = [];
+        $usersColor = [];
+        $usersBorderColor = [];
+        $avgResponseTime = [];
+        $avgResolutionTime = [];
+        
+        foreach ($users as $index => $user) {
+            $usersInCharge[] = $user->name;
+            $avgResponseTimeValue = 0;
+            $avgResolutionTimeValue = 0;
+            foreach($averageTimes as $averageTime){
+                if($averageTime->done_by == $user->id){
+                    $avgResponseTimeValue = round(($averageTime->avg_response_time/60), 2);
+                    $avgResolutionTimeValue = round(($averageTime->avg_resolution_time/60), 2);
+                }
+            }
+
+            $avgResponseTime[] = $avgResponseTimeValue;
+            $avgResolutionTime[] = $avgResolutionTimeValue;
+
+            $usersColor[] = "rgba($colorsArray[$index], 0.4)";
+            $usersBorderColor[] = "rgba($colorsArray[$index])";
         }
 
         $ticketsPerDayQuery = Ticket::selectRaw('DATE(created_at) as date, COUNT(*) as total_tickets')
@@ -604,6 +701,6 @@ class TicketController extends Controller
 
 
 
-        return view('ticketing.reports', compact('tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF', 'dates', 'ticketsPerDay'));
+        return view('ticketing.reports', compact('usersInCharge', 'usersColor', 'usersBorderColor', 'avgResponseTime', 'avgResolutionTime', 'tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF', 'dates', 'ticketsPerDay'));
     }
 }

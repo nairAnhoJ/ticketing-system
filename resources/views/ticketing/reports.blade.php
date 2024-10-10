@@ -222,13 +222,13 @@
                             </div>
                             <div class="h-[calc(50%-24px)] flex gap-x-6 py-6">
                                 <div class="h-full w-full flex flex-col items-center justify-center bg-gray-800 shadow-lg p-3 rounded-xl">
-                                    <h1 class="text-center pb-4 text-lg font-bold">Average Response Chart (minute/s)</h1>
+                                    <h1 class="text-center pb-4 text-lg font-bold">Average Response Chart (hour/s)</h1>
                                     <div class="h-full w-full">
                                         <canvas id="AverageResponseChart"></canvas>
                                     </div>
                                 </div>
                                 <div class="w-full h-full flex flex-col items-center justify-center bg-gray-800 shadow-lg p-3 rounded-xl">
-                                    <h1 class="text-center pb-4 text-lg font-bold">Average Resolution Chart (minute/s)</h1>
+                                    <h1 class="text-center pb-4 text-lg font-bold">Average Resolution Chart (hour/s)</h1>
                                     <div class="w-full h-full">
                                         <canvas id="AverageResolutionChart"></canvas>
                                     </div>
@@ -531,32 +531,30 @@
                     ticketTrendsConfig
                 );
             // Ticket Trends Chart
-
+            
             // Average Response Chart
-                const  AverageResponseLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July'];
+                const usersInCharge = @json($usersInCharge);
+                const usersColor = @json($usersColor);
+                const usersBorderColor = @json($usersBorderColor);
+                const avgResponseTime = @json($avgResponseTime);
+                const  AverageResponseLabels = usersInCharge;
+
+                const highestAvgResponseTime = Math.max(...avgResponseTime);
+                const remainderAvgResponseTime = highestAvgResponseTime % 3;
+
+                const maxYAvgResponseTime = highestAvgResponseTime + (3 - remainderAvgResponseTime);
+
+                console.log(avgResponseTime);
+                console.log(maxYAvgResponseTime);
+
                 const AverageResponseData = {
                     labels: AverageResponseLabels,
                     datasets: [{
                         label: ' ',
-                        data: [100, 59, 80, 81, 56, 90, 40],
-                        backgroundColor: [
-                        'rgba(255, 99, 132, 0.3)',
-                        'rgba(255, 159, 64, 0.3)',
-                        'rgba(255, 205, 86, 0.3)',
-                        'rgba(75, 192, 192, 0.3)',
-                        'rgba(54, 162, 235, 0.3)',
-                        'rgba(153, 102, 255, 0.3)',
-                        'rgba(201, 203, 207, 0.3)'
-                        ],
-                        borderColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)'
-                        ],
+                        data: avgResponseTime,
+                        // data: [60, 50, 80, 30, 66, 70, 50,77],
+                        backgroundColor: usersColor,
+                        borderColor: usersBorderColor,
                         borderWidth: 1
                     }]
                 };
@@ -576,7 +574,7 @@
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                max: 110
+                                max: maxYAvgResponseTime
                             }
                         }
                     },
@@ -586,33 +584,25 @@
                     document.getElementById('AverageResponseChart'),
                     AverageResponseConfig
                 );
-            // Overall Status Chart
-
             // Average Response Chart
-                const AverageResolutionLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July'];
+
+            // Average Resolution Chart
+                const avgResolutionTime = @json($avgResolutionTime);
+                const AverageResolutionLabels = usersInCharge;
+
+                const highestAvgResolutionTime = Math.max(...avgResolutionTime);
+                const remainderAvgResolutionTime = highestAvgResolutionTime % 3;
+
+                const maxYAvgResolutionTime = highestAvgResolutionTime + (3 - remainderAvgResolutionTime);
+
                 const AverageResolutionData = {
                     labels: AverageResolutionLabels,
                     datasets: [{
                         label: ' ',
-                        data: [200, 59, 50, 81, 56, 60, 40],
-                        backgroundColor: [
-                        'rgba(255, 99, 132, 0.3)',
-                        'rgba(255, 159, 64, 0.3)',
-                        'rgba(255, 205, 86, 0.3)',
-                        'rgba(75, 192, 192, 0.3)',
-                        'rgba(54, 162, 235, 0.3)',
-                        'rgba(153, 102, 255, 0.3)',
-                        'rgba(201, 203, 207, 0.3)'
-                        ],
-                        borderColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)'
-                        ],
+                        // data: [60, 50, 80, 30, 66, 70, 50,77],
+                        data: avgResolutionTime,
+                        backgroundColor: usersColor,
+                        borderColor: usersBorderColor,
                         borderWidth: 1
                     }]
                 };
@@ -632,7 +622,7 @@
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                max: 210
+                                max: maxYAvgResolutionTime
                             }
                         }
                     },
@@ -642,7 +632,7 @@
                     document.getElementById('AverageResolutionChart'),
                     AverageResolutionConfig
                 );
-            // Overall Status Chart
+            // Average Resolution Chart
 
             $("#tableSearch").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
