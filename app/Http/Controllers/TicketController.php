@@ -558,7 +558,7 @@ class TicketController extends Controller
             DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, start_date_time)) as avg_response_time'),
             DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, end_date_time)) as avg_resolution_time')
         )
-        ->where('status', '!=', 'CANCELLED')
+        ->where('status', 'DONE')
         ->whereBetween('created_at', [$start, $end])
         ->groupBy('done_by');
         if ($userF != 0) {
