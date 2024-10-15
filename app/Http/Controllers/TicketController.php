@@ -407,13 +407,15 @@ class TicketController extends Controller
         }
 
         $averageTimes = Ticket::select('done_by',
-            DB::raw('AVG(TIMESTAMPDIFF(HOUR, created_at, start_date_time)) as avg_response_time'),
-            DB::raw('AVG(TIMESTAMPDIFF(HOUR, created_at, end_date_time)) as avg_resolution_time')
+            DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, start_date_time)) as avg_response_time'),
+            DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, end_date_time)) as avg_resolution_time')
         )
-        ->where('status', '!=', 'CANCELLED')
+        ->where('status', 'DONE')
         ->whereBetween('created_at', [$start, $end])
         ->groupBy('done_by')
         ->get();
+
+        // dd($averageTimes);
 
         $colorsArray = [
             "169,197,160",  // Celadon
@@ -568,6 +570,7 @@ class TicketController extends Controller
             $averageTimes->where('nature_of_problem', $categoryF);
         }
         $averageTimes = $averageTimes->get();
+
 
         $colorsArray = [
             "169,197,160",  // Celadon
