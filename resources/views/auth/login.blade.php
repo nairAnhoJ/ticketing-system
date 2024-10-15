@@ -1,6 +1,6 @@
 <x-guest-layout>
     @section('title')
-    HR Ticketing - Login
+    {{ $deptInCharge->department->name }} Ticketing - Login
     @endsection
     <x-auth-card>
         <x-slot name="logo">

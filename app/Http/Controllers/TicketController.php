@@ -410,142 +410,7 @@ class TicketController extends Controller
             DB::raw('AVG(TIMESTAMPDIFF(HOUR, created_at, start_date_time)) as avg_response_time'),
             DB::raw('AVG(TIMESTAMPDIFF(HOUR, created_at, end_date_time)) as avg_resolution_time')
         )
-        ->whereBetween('created_at', [$start, $end])
-        ->groupBy('done_by')
-        ->get();
-
-        $colorsArray = [
-            "169,197,160",  // Celadon
-            "255,248,240",  // Floral White
-            "158,43,37",    // Auburn
-            "171,146,191",  // African Violet
-            "115,108,237",  // Medium Slate Blue
-            "101,82,77",    // Wenge
-            "127,194,155",  // Cambridge Blue
-            "115,75,94",    // Eggplant
-            "229,220,194",  // Pearl
-            "213,87,59",    // Jasper
-            "5,142,63",     // Forest Green
-            "63,124,172",   // Steel BLue
-            "248,90,62",    // Tomato
-            "225,230,225",  // Platinum
-            "242,95,92",    // Bittersweet
-            "255,87,159",   // Brilliant Rose
-        ];
-        $usersInCharge = [];
-        $usersColor = [];
-        $usersBorderColor = [];
-        $avgResponseTime = [];
-        $avgResolutionTime = [];
-        foreach ($users as $index => $user) {
-            $usersInCharge[] = $user->name;
-            foreach($averageTimes as $averageTime){
-                if($averageTime->done_by == $user->id){
-                    $avgResponseTime[] = round($averageTime->avg_response_time, 2);
-                    $avgResolutionTime[] = round($averageTime->avg_resolution_time, 2);
-                }else{
-                    $avgResponseTime[] = 0;
-                    $avgResolutionTime[] = 0;
-                }
-            }
-            
-            $usersColor[] = "rgba($colorsArray[$index], 0.4)";
-            $usersBorderColor[] = "rgba($colorsArray[$index])";
-        }
-
-        $ticketsPerDayQuery = Ticket::selectRaw('DATE(created_at) as date, COUNT(*) as total_tickets')
-            ->whereBetween('created_at', [$start, $end])
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
-
-        $ticketsPerDay = [];
-        for ($date = $start; $date->lte($end); $date->addDay()) {
-            $ticketsPerDay[$date->format('Y-m-d')] = 0; // Set default ticket count to 0 for each day
-        }
-
-        // Now merge the results from the query into the $ticketsPerDay array
-        foreach ($ticketsPerDayQuery as $ticket) {
-            $ticketsPerDay[$ticket->date] = $ticket->total_tickets;
-        }
-
-        // $tickets = DB::select("SELECT tickets.id, tickets.ticket_no, u.name AS user, departments.name AS dept, ticket_categories.name AS nature_of_problem, a.name AS assigned_to, tickets.subject, tickets.description, tickets.status, tickets.created_at, tickets.attachment, tickets.resolution FROM tickets INNER JOIN users AS u ON tickets.user_id = u.id INNER JOIN departments ON tickets.department = departments.id INNER JOIN users AS a ON tickets.assigned_to = a.id INNER JOIN ticket_categories ON tickets.nature_of_problem = ticket_categories.id WHERE tickets.created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME) AND tickets.status != 'CANCELLED' ORDER BY tickets.id DESC", [$newDateFrom, $newDateTo]);
-
-        $tickets = DB::table('tickets')
-            ->select(
-                'tickets.id',
-                'tickets.ticket_no',
-                'u.name AS user',
-                'departments.name AS dept',
-                'ticket_categories.name AS nature_of_problem',
-                'a.name AS assigned_to',
-                'd.name AS done_by',
-                'tickets.subject',
-                'tickets.description',
-                'tickets.status',
-                'tickets.is_SAP',
-                'tickets.created_at',
-                'tickets.attachment',
-                'tickets.resolution',
-                'tickets.resolution_attachment',
-                'tickets.update'
-            )
-            ->join('users AS u', 'tickets.user_id', '=', 'u.id')
-            ->join('departments', 'tickets.department', '=', 'departments.id')
-            ->join('users AS a', 'tickets.assigned_to', '=', 'a.id')
-            ->leftJoin('users AS d', 'tickets.done_by', '=', 'd.id')
-            ->join('ticket_categories', 'tickets.nature_of_problem', '=', 'ticket_categories.id')
-            ->whereBetween('tickets.created_at', [date('Y-m-d H:i:s', strtotime($newDateFrom)), date('Y-m-d H:i:s', strtotime($newDateTo))])
-            ->where('tickets.status', '!=', 'CANCELLED')
-            ->orderBy('tickets.id', 'DESC')
-            ->get();
-
-        $total = count($tickets);
-        $pending = (DB::select("SELECT COUNT(id) AS count FROM tickets WHERE status = 'PENDING' AND created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME)", [$newDateFrom, $newDateTo]))[0]->count;
-        $ongoing = (DB::select("SELECT COUNT(id) AS count FROM tickets WHERE status = 'ONGOING' AND created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME)", [$newDateFrom, $newDateTo]))[0]->count;
-        $done = (DB::select("SELECT COUNT(id) AS count FROM tickets WHERE status = 'DONE' AND created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME)", [$newDateFrom, $newDateTo]))[0]->count;
-
-
-        return view('ticketing.reports', compact('usersInCharge', 'usersColor', 'usersBorderColor', 'avgResponseTime', 'avgResolutionTime', 'tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF', 'dates', 'ticketsPerDay'));
-    }
-    
-    public function genReport(Request $request){
-        $deptInCharge = (DB::table('dept_in_charges')->where('id', 1)->first())->dept_id;
-        $users = User::where('dept_id', $deptInCharge)->where('id', '!=', 1)->orderBy('name', 'asc')->get();
-        // $users = DB::select('SELECT * FROM users WHERE dept_id = ? AND id != ?', [$deptInCharge, 1]);
-        $cats = DB::table('ticket_categories')->orderBy('name', 'desc')->get();
-
-        $inputDateFrom = $request->dateFrom;
-        $inputDateTo = $request->dateTo;
-
-        $dateFrom = $request->dateFrom.' 00:00:00.000';
-        $newDateFrom = date("Y-m-d H:i:s", strtotime($dateFrom));
-        $dateTo = $request->dateTo.' 23:59:59';
-        $newDateTo = date("Y-m-d H:i:s", strtotime($dateTo));
-        $userF = $request->user;
-        $userfilter = "";
-        if($userF != 0){
-            $userfilter = " AND tickets.done_by = ".$userF;
-        }
-
-        $start = Carbon::parse($newDateFrom);
-        $end = Carbon::parse($newDateTo);
-
-        // Create DatePeriod object
-        $interval = new DateInterval('P1D'); // 1 Day interval
-        $period = new DatePeriod($start, $interval, $end->addDay());
-
-        $dates = [];
-
-        // Loop through the DatePeriod object and format each date
-        foreach ($period as $date) {
-            $dates[] = $date->format('Y-m-d');
-        }
-
-        $averageTimes = Ticket::select('done_by',
-            DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, start_date_time)) as avg_response_time'),
-            DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, end_date_time)) as avg_resolution_time')
-        )
+        ->where('status', '!=', 'CANCELLED')
         ->whereBetween('created_at', [$start, $end])
         ->groupBy('done_by')
         ->get();
@@ -608,15 +473,161 @@ class TicketController extends Controller
             $ticketsPerDay[$ticket->date] = $ticket->total_tickets;
         }
 
+        // $tickets = DB::select("SELECT tickets.id, tickets.ticket_no, u.name AS user, departments.name AS dept, ticket_categories.name AS nature_of_problem, a.name AS assigned_to, tickets.subject, tickets.description, tickets.status, tickets.created_at, tickets.attachment, tickets.resolution FROM tickets INNER JOIN users AS u ON tickets.user_id = u.id INNER JOIN departments ON tickets.department = departments.id INNER JOIN users AS a ON tickets.assigned_to = a.id INNER JOIN ticket_categories ON tickets.nature_of_problem = ticket_categories.id WHERE tickets.created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME) AND tickets.status != 'CANCELLED' ORDER BY tickets.id DESC", [$newDateFrom, $newDateTo]);
+
+        $tickets = DB::table('tickets')
+            ->select(
+                'tickets.id',
+                'tickets.ticket_no',
+                'u.name AS user',
+                'departments.name AS dept',
+                'ticket_categories.name AS nature_of_problem',
+                'a.name AS assigned_to',
+                'd.name AS done_by',
+                'tickets.subject',
+                'tickets.description',
+                'tickets.status',
+                'tickets.is_SAP',
+                'tickets.created_at',
+                'tickets.attachment',
+                'tickets.resolution',
+                'tickets.resolution_attachment',
+                'tickets.update'
+            )
+            ->join('users AS u', 'tickets.user_id', '=', 'u.id')
+            ->join('departments', 'tickets.department', '=', 'departments.id')
+            ->join('users AS a', 'tickets.assigned_to', '=', 'a.id')
+            ->leftJoin('users AS d', 'tickets.done_by', '=', 'd.id')
+            ->join('ticket_categories', 'tickets.nature_of_problem', '=', 'ticket_categories.id')
+            ->whereBetween('tickets.created_at', [date('Y-m-d H:i:s', strtotime($newDateFrom)), date('Y-m-d H:i:s', strtotime($newDateTo))])
+            ->where('tickets.status', '!=', 'CANCELLED')
+            ->orderBy('tickets.id', 'DESC')
+            ->get();
+
+        $total = count($tickets);
+        $pending = (DB::select("SELECT COUNT(id) AS count FROM tickets WHERE status = 'PENDING' AND created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME)", [$newDateFrom, $newDateTo]))[0]->count;
+        $ongoing = (DB::select("SELECT COUNT(id) AS count FROM tickets WHERE status = 'ONGOING' AND created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME)", [$newDateFrom, $newDateTo]))[0]->count;
+        $done = (DB::select("SELECT COUNT(id) AS count FROM tickets WHERE status = 'DONE' AND created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME)", [$newDateFrom, $newDateTo]))[0]->count;
+
+
+        return view('ticketing.reports', compact('usersInCharge', 'usersColor', 'usersBorderColor', 'avgResponseTime', 'avgResolutionTime', 'tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF', 'dates', 'ticketsPerDay', 'deptInCharge'));
+    }
+    
+    public function genReport(Request $request){
+        $deptInCharge = (DB::table('dept_in_charges')->where('id', 1)->first())->dept_id;
+        $users = User::where('dept_id', $deptInCharge)->where('id', '!=', 1)->orderBy('name', 'asc')->get();
+        // $users = DB::select('SELECT * FROM users WHERE dept_id = ? AND id != ?', [$deptInCharge, 1]);
+        $cats = DB::table('ticket_categories')->orderBy('name', 'desc')->get();
+
         $categoryF = $request->category;
         $catfilter = "";
         if($categoryF != 0){
             $catfilter = " AND tickets.nature_of_problem = ".$categoryF;
         }
+
+        $inputDateFrom = $request->dateFrom;
+        $inputDateTo = $request->dateTo;
+
+        $dateFrom = $request->dateFrom.' 00:00:00.000';
+        $newDateFrom = date("Y-m-d H:i:s", strtotime($dateFrom));
+        $dateTo = $request->dateTo.' 23:59:59';
+        $newDateTo = date("Y-m-d H:i:s", strtotime($dateTo));
+        $userF = $request->user;
+        $userfilter = "";
+        if($userF != 0){
+            $userfilter = " AND tickets.done_by = ".$userF;
+        }
+
+        $start = Carbon::parse($newDateFrom);
+        $end = Carbon::parse($newDateTo);
+
+        // Create DatePeriod object
+        $interval = new DateInterval('P1D'); // 1 Day interval
+        $period = new DatePeriod($start, $interval, $end->addDay());
+
+        $dates = [];
+
+        // Loop through the DatePeriod object and format each date
+        foreach ($period as $date) {
+            $dates[] = $date->format('Y-m-d');
+        }
+
+        $averageTimes = Ticket::select('done_by',
+            DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, start_date_time)) as avg_response_time'),
+            DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, end_date_time)) as avg_resolution_time')
+        )
+        ->where('status', '!=', 'CANCELLED')
+        ->whereBetween('created_at', [$start, $end])
+        ->groupBy('done_by');
+        if ($userF != 0) {
+            $averageTimes->where('done_by', $userF);
+        }
+        if ($categoryF != 0) {
+            $averageTimes->where('nature_of_problem', $categoryF);
+        }
+        $averageTimes = $averageTimes->get();
+
+        $colorsArray = [
+            "169,197,160",  // Celadon
+            "255,248,240",  // Floral White
+            "158,43,37",    // Auburn
+            "171,146,191",  // African Violet
+            "115,108,237",  // Medium Slate Blue
+            "101,82,77",    // Wenge
+            "127,194,155",  // Cambridge Blue
+            "115,75,94",    // Eggplant
+            "229,220,194",  // Pearl
+            "213,87,59",    // Jasper
+            "5,142,63",     // Forest Green
+            "63,124,172",   // Steel BLue
+            "248,90,62",    // Tomato
+            "225,230,225",  // Platinum
+            "242,95,92",    // Bittersweet
+            "255,87,159",   // Brilliant Rose
+        ];
+        $usersInCharge = [];
+        $usersColor = [];
+        $usersBorderColor = [];
+        $avgResponseTime = [];
+        $avgResolutionTime = [];
+        
+        foreach ($users as $index => $user) {
+            $usersInCharge[] = $user->name;
+            $avgResponseTimeValue = 0;
+            $avgResolutionTimeValue = 0;
+            foreach($averageTimes as $averageTime){
+                if($averageTime->done_by == $user->id){
+                    $avgResponseTimeValue = round(($averageTime->avg_response_time/60), 2);
+                    $avgResolutionTimeValue = round(($averageTime->avg_resolution_time/60), 2);
+                }
+            }
+
+            $avgResponseTime[] = $avgResponseTimeValue;
+            $avgResolutionTime[] = $avgResolutionTimeValue;
+
+            $usersColor[] = "rgba($colorsArray[$index], 0.4)";
+            $usersBorderColor[] = "rgba($colorsArray[$index])";
+        }
+
+        $ticketsPerDayQuery = Ticket::selectRaw('DATE(created_at) as date, COUNT(*) as total_tickets')
+            ->whereBetween('created_at', [$start, $end])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $ticketsPerDay = [];
+        for ($date = $start; $date->lte($end); $date->addDay()) {
+            $ticketsPerDay[$date->format('Y-m-d')] = 0; // Set default ticket count to 0 for each day
+        }
+
+        // Now merge the results from the query into the $ticketsPerDay array
+        foreach ($ticketsPerDayQuery as $ticket) {
+            $ticketsPerDay[$ticket->date] = $ticket->total_tickets;
+        }
+
         $cbp = 0;
         $cbo = 0;
         $cbd = 0;
-
         
         $pending = (DB::select("SELECT COUNT(id) AS count FROM tickets WHERE status = 'PENDING' AND created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME)".$userfilter.$catfilter, [$newDateFrom, $newDateTo]))[0]->count;
         $ongoing = (DB::select("SELECT COUNT(id) AS count FROM tickets WHERE status = 'ONGOING' AND created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME)".$userfilter.$catfilter, [$newDateFrom, $newDateTo]))[0]->count;
@@ -638,6 +649,7 @@ class TicketController extends Controller
                 'tickets.status',
                 'tickets.is_SAP',
                 'tickets.created_at',
+                'tickets.end_date_time',
                 'tickets.attachment',
                 'tickets.resolution',
                 'tickets.resolution_attachment',
@@ -701,6 +713,6 @@ class TicketController extends Controller
 
 
 
-        return view('ticketing.reports', compact('usersInCharge', 'usersColor', 'usersBorderColor', 'avgResponseTime', 'avgResolutionTime', 'tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF', 'dates', 'ticketsPerDay'));
+        return view('ticketing.reports', compact('usersInCharge', 'usersColor', 'usersBorderColor', 'avgResponseTime', 'avgResolutionTime', 'tickets', 'total', 'pending', 'ongoing', 'done', 'users', 'cats', 'inputDateFrom', 'inputDateTo', 'cbp', 'cbo', 'cbd', 'userF', 'categoryF', 'dates', 'ticketsPerDay', 'deptInCharge'));
     }
 }

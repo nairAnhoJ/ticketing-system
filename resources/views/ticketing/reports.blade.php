@@ -338,22 +338,27 @@
                                 DEPARTMENT
                             </th>
                             <th scope="col" class="sticky top-0 py-2 text-center">
-                                DATE CREATED
-                            </th>
-                            <th scope="col" class="sticky top-0 py-2 text-center">
                                 NATURE OF PROBLEM
                             </th>
                             <th scope="col" class="sticky top-0 py-2 text-center">
                                 SUBJECT
                             </th>
                             <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
+                                STATUS
+                            </th>
+                            <th scope="col" class="sticky top-0 py-2 text-center">
+                                DATE CREATED
+                            </th>
+                            @if (auth()->user()->dept_id == $deptInCharge)
+                                <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
+                                    ELAPSED TIME
+                                </th>
+                            @endif
+                            <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
                                 ASSIGNED TO
                             </th>
                             <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
                                 DONE BY
-                            </th>
-                            <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
-                                STATUS
                             </th>
                         </tr>
                     </thead>
@@ -385,37 +390,77 @@
                                     {{ $ticket->dept }}
                                 </td>
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
-                                    {{ date("M d, Y", strtotime($ticket->created_at)) }}
-                                </td>
-                                <td class="px-6 py-3 text-center whitespace-nowrap">
                                     {{ $ticket->nature_of_problem }}
                                 </td>
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
                                     {{ $ticket->subject }}
                                 </td>
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
-                                    {{ $ticket->assigned_to }}
-                                </td>
-                                <td class="px-6 py-3 text-center whitespace-nowrap">
-                                    {{ $ticket->done_by }}
-                                </td>
-                                <td class="px-6 py-3 text-center whitespace-nowrap">
                                     <span class="
                                         @php
                                             $status = $ticket->status;
                                             if($status == 'PENDING'){
+                                                $currentDateTime = new DateTime();
                                                 echo 'text-red-500';
                                             }elseif($status == 'ONGOING'){
+                                                $currentDateTime = new DateTime();
                                                 echo 'text-amber-300';
                                             }elseif($status == 'DONE'){
+                                                $currentDateTime = new DateTime($ticket->end_date_time);
                                                 echo 'text-teal-500';
                                             }
+                                            $createdDateTime = new DateTime($ticket->created_at);
+                                            $interval = $createdDateTime->diff($currentDateTime);
+                                            $months = $interval->m;
+                                            $days = $interval->d;
+                                            $hours = $interval->h;
+                                            $minutes = $interval->i;
                                         @endphp
                                     ">
-                                        @php
-                                            echo $status;
-                                        @endphp
+                                        {{ $status }}
                                     </span>
+                                </td>
+                                <td class="px-6 py-3 text-center whitespace-nowrap">
+                                    {{ date("M d, Y", strtotime($ticket->created_at)) }}
+                                </td>
+                                @if (auth()->user()->dept_id == $deptInCharge)
+                                    <td class="px-6 py-3 text-center whitespace-nowrap">
+                                        @if ($status == 'ONGOING' || $status == 'PENDING' || $status == 'DONE')
+                                            @php
+                                                $labelMonth = ' Months ';
+                                                $labelDay = ' Days ';
+                                                $labelHour = ' Hours ';
+                                                $labelMinutes = ' Minutes ';
+                                                if($months == 1){
+                                                    $labelMonth = ' Month ';
+                                                }
+                                                if ($days == 1) {
+                                                    $labelDay = ' Day ';
+                                                }
+                                                if ($hours == 1) {
+                                                    $labelHour = ' Hour ';
+                                                }
+                                                if ($minutes == 1) {
+                                                    $labelMinutes = ' Minute ';
+                                                }
+                                            @endphp
+                                            @if ($months != 0)
+                                                {{ $months . $labelMonth . $days . $labelDay . $hours . $labelHour . $minutes . $labelMinutes }}
+                                            @elseif ($days != 0)
+                                                {{ $days . $labelDay . $hours . $labelHour . $minutes . $labelMinutes }}
+                                            @elseif($hours != 0)
+                                                {{ $hours . $labelHour . $minutes . $labelMinutes }}
+                                            @else
+                                                {{ $minutes . $labelMinutes }}
+                                            @endif
+                                        @endif
+                                    </td>
+                                @endif
+                                <td class="px-6 py-3 text-center whitespace-nowrap">
+                                    {{ $ticket->assigned_to }}
+                                </td>
+                                <td class="px-6 py-3 text-center whitespace-nowrap">
+                                    {{ $ticket->done_by }}
                                 </td>
                             </tr>
                         @endforeach
@@ -482,7 +527,7 @@
                 const ticketTrendsData = {
                     labels: dates,
                     datasets: [{
-                        label: 'ㅤ',
+                        label: ' ',
                         data: ticketsPerDay,
                         fill: false,
                         borderColor: 'rgb(34, 197, 94)',
@@ -540,12 +585,9 @@
                 const  AverageResponseLabels = usersInCharge;
 
                 const highestAvgResponseTime = Math.max(...avgResponseTime);
-                const remainderAvgResponseTime = highestAvgResponseTime % 3;
+                const remainderAvgResponseTime = highestAvgResponseTime % 1;
 
-                const maxYAvgResponseTime = highestAvgResponseTime + (3 - remainderAvgResponseTime);
-
-                console.log(avgResponseTime);
-                console.log(maxYAvgResponseTime);
+                const maxYAvgResponseTime = highestAvgResponseTime + (1 - remainderAvgResponseTime);
 
                 const AverageResponseData = {
                     labels: AverageResponseLabels,
@@ -591,9 +633,10 @@
                 const AverageResolutionLabels = usersInCharge;
 
                 const highestAvgResolutionTime = Math.max(...avgResolutionTime);
-                const remainderAvgResolutionTime = highestAvgResolutionTime % 3;
+                const remainderAvgResolutionTime = highestAvgResolutionTime % 1;
+                console.log(highestAvgResolutionTime);
 
-                const maxYAvgResolutionTime = highestAvgResolutionTime + (3 - remainderAvgResolutionTime);
+                const maxYAvgResolutionTime = highestAvgResolutionTime + (1 - remainderAvgResolutionTime);
 
                 const AverageResolutionData = {
                     labels: AverageResolutionLabels,

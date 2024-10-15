@@ -459,22 +459,22 @@
                                 DEPARTMENT
                             </th>
                             <th scope="col" class="sticky top-0 py-2 text-center">
-                                DATE/TIME CREATED
+                                NATURE OF PROBLEM
+                            </th>
+                            <th scope="col" class="sticky top-0 max-w-xs py-2 text-center">
+                                SUBJECT
                             </th>
                             <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
                                 STATUS
+                            </th>
+                            <th scope="col" class="sticky top-0 py-2 text-center">
+                                DATE/TIME CREATED
                             </th>
                             @if (auth()->user()->dept_id == $deptInCharge)
                                 <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
                                     ELAPSED TIME
                                 </th>
                             @endif
-                            <th scope="col" class="sticky top-0 py-2 text-center">
-                                NATURE OF PROBLEM
-                            </th>
-                            <th scope="col" class="sticky top-0 max-w-xs py-2 text-center">
-                                SUBJECT
-                            </th>
                             <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
                                 ASSIGNED TO
                             </th>
@@ -518,7 +518,10 @@
                                     {{ $ticket->departmentRow['name'] }}
                                 </td>
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
-                                    {{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}
+                                    {{ $ticket->category['name'] }}
+                                </td>
+                                <td class="max-w-xs px-6 py-3 overflow-hidden text-center whitespace-nowrap">
+                                    {{ $ticket->subject }}
                                 </td>
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
                                     <span class="
@@ -540,12 +543,16 @@
                                             $months = $interval->m;
                                             $days = $interval->d;
                                             $hours = $interval->h;
+                                            $minutes = $interval->i;
                                         @endphp
                                     ">
                                         @php
                                             echo $status;
                                         @endphp
                                     </span>
+                                </td>
+                                <td class="px-6 py-3 text-center whitespace-nowrap">
+                                    {{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}
                                 </td>
                                 @if (auth()->user()->dept_id == $deptInCharge)
                                     <td class="px-6 py-3 text-center whitespace-nowrap">
@@ -554,6 +561,7 @@
                                                 $labelMonth = ' Months ';
                                                 $labelDay = ' Days ';
                                                 $labelHour = ' Hours ';
+                                                $labelMinutes = ' Minutes ';
                                                 if($months == 1){
                                                     $labelMonth = ' Month ';
                                                 }
@@ -563,23 +571,22 @@
                                                 if ($hours == 1) {
                                                     $labelHour = ' Hour ';
                                                 }
+                                                if ($minutes == 1) {
+                                                    $labelMinutes = ' Minute ';
+                                                }
                                             @endphp
                                             @if ($months != 0)
-                                                {{ $months . $labelMonth . $days . $labelDay . $hours . $labelHour }}
+                                                {{ $months . $labelMonth . $days . $labelDay . $hours . $labelHour . $minutes . $labelMinutes }}
                                             @elseif ($days != 0)
-                                                {{ $days . $labelDay . $hours . $labelHour }}
+                                                {{ $days . $labelDay . $hours . $labelHour . $minutes . $labelMinutes }}
+                                            @elseif($hours != 0)
+                                                {{ $hours . $labelHour . $minutes . $labelMinutes }}
                                             @else
-                                                {{ $hours . $labelHour }}
+                                                {{ $minutes . $labelMinutes }}
                                             @endif
                                         @endif
                                     </td>
                                 @endif
-                                <td class="px-6 py-3 text-center whitespace-nowrap">
-                                    {{ $ticket->category['name'] }}
-                                </td>
-                                <td class="max-w-xs px-6 py-3 overflow-hidden text-center whitespace-nowrap">
-                                    {{ $ticket->subject }}
-                                </td>
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
                                     {{ $ticket->assigned['name'] }}
                                 </td>
