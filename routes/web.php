@@ -42,10 +42,15 @@ Route::get('/', function () {
     if(!auth()->user()){
         $deptInCharge = DeptInCharge::with('department')->where('id', 1)->first();
         
+        // dd('test');
+        // return redirect('/');
         return view('auth.login', compact('deptInCharge'));
     }else{
         return redirect()->route('dashboard');
     }
+});
+Route::get('/login', function () {
+    return redirect('/');
 });
 
 Route::get('/dashboard', function () {
