@@ -96,7 +96,7 @@ class TicketController extends Controller
             }else{
                 $TicketID = '0001';
             }
-            $ticketNo = date('yym').$TicketID;
+            $ticketNo = date('my').$TicketID;
         // Generate Ticket Number
 
         // Attachment
@@ -213,7 +213,7 @@ class TicketController extends Controller
         }else{
             $TicketID = '0001';
         }
-        $ticketNo = date('yym').$TicketID;
+        $ticketNo = date('my').$TicketID;
 
         $attPath = null;
         if($attachment != null){
