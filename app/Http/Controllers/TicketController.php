@@ -617,8 +617,14 @@ class TicketController extends Controller
         $ticketsPerDayQuery = Ticket::selectRaw('DATE(created_at) as date, COUNT(*) as total_tickets')
             ->whereBetween('created_at', [$start, $end])
             ->groupBy('date')
-            ->orderBy('date')
-            ->get();
+            ->orderBy('date');
+        if ($userF != 0) {
+            $ticketsPerDayQuery->where('done_by', $userF);
+        }
+        if ($categoryF != 0) {
+            $ticketsPerDayQuery->where('nature_of_problem', $categoryF);
+        }
+        $ticketsPerDayQuery = $ticketsPerDayQuery->get();
 
         $ticketsPerDay = [];
         for ($date = $start; $date->lte($end); $date->addDay()) {
