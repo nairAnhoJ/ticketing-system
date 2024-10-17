@@ -28,32 +28,39 @@ class TicketController extends Controller
         $userDept = '';
         $deptInCharge = '';
 
-        $userDeptRow = DB::table('departments')->where('id', $userDeptID)->first();
-        if($userDeptRow != null){
-            $userDept = $userDeptRow->name;
-        }
-        $deptInChargeRow = DeptInCharge::with('department')->where('id', 1)->first();
-        if($deptInChargeRow != null){
-            $deptInCharge = $deptInChargeRow->dept_id;
-        }
+        // User Department
+            $userDeptRow = DB::table('departments')->where('id', $userDeptID)->first();
+            if($userDeptRow != null){
+                $userDept = $userDeptRow->name;
+            }
+        // User Department
+        
+        // Department In-charge ID
+            $deptInChargeRow = DeptInCharge::with('department')->where('id', 1)->first();
+            if($deptInChargeRow != null){
+                $deptInCharge = $deptInChargeRow->dept_id;
+            }
+        // Department In-charge ID
 
-        if($userDeptID != $deptInCharge){
-            $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
-                ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
-                ->where('department', $userDeptID)
-                ->where('user_id', $userID)
-                ->orderBy('status', 'desc')
-                ->orderBy('id', 'desc')
-                ->limit(50)
-                ->get();
-        }else{
-            $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
-                ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
-                ->orderBy('status', 'desc')
-                ->orderBy('id', 'desc')
-                ->limit(50)
-                ->get();
-        }
+        // All Tickets
+            if($userDeptID != $deptInCharge){
+                $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
+                    ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
+                    ->where('department', $userDeptID)
+                    ->where('user_id', $userID)
+                    ->orderBy('status', 'desc')
+                    ->orderBy('id', 'desc')
+                    ->limit(50)
+                    ->get();
+            }else{
+                $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
+                    ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
+                    ->orderBy('status', 'desc')
+                    ->orderBy('id', 'desc')
+                    ->limit(50)
+                    ->get();
+            }
+        // All Tickets
 
         return view('ticketing.dashboard', compact('userDept', 'tickets', 'deptInCharge', 'deptInChargeRow'));
     }
@@ -73,29 +80,33 @@ class TicketController extends Controller
         $incharge = User::where('id', $in_charge)->first();
         $smtp = DB::table('settings')->where('id', 1)->first();
 
-        $TicketID = DB::table('tickets')->orderBy('id','DESC')->first();
-        if(isset($TicketID)){
-            $TicketID = $TicketID->id + 1;
-            if(strlen($TicketID) <= 4){
-                $TicketIDLength = 4 - strlen($TicketID);
-        
-                for($x = 1; $x <= $TicketIDLength; $x++){
-                    $TicketID = "0{$TicketID}";
+        // Generate Ticket Number
+            $TicketID = DB::table('tickets')->orderBy('id','DESC')->first();
+            if(isset($TicketID)){
+                $TicketID = $TicketID->id + 1;
+                if(strlen($TicketID) <= 4){
+                    $TicketIDLength = 4 - strlen($TicketID);
+            
+                    for($x = 1; $x <= $TicketIDLength; $x++){
+                        $TicketID = "0{$TicketID}";
+                    }
+                }else{
+                    $TicketID = substr($TicketID, -4);
                 }
             }else{
-                $TicketID = substr($TicketID, -4);
+                $TicketID = '0001';
             }
-        }else{
-            $TicketID = '0001';
-        }
-        $ticketNo = date('m').$TicketID;
+            $ticketNo = date('m').$TicketID;
+        // Generate Ticket Number
 
-        if($attachment != null){
-            $filename = date('Ymd') . '-' . $ticketNo . '.' . $request->file('attachment')->getClientOriginalExtension();
-            $path = "storage/attachments/";
-            $attachment_path = $path . $filename;
-            $request->file('attachment')->move(public_path($path), $filename);
-        }
+        // Attachment
+            if($attachment != null){
+                $filename = date('Ymd') . '-' . $ticketNo . '.' . $request->file('attachment')->getClientOriginalExtension();
+                $path = "storage/attachments/";
+                $attachment_path = $path . $filename;
+                $request->file('attachment')->move(public_path($path), $filename);
+            }
+        // Attachment
 
         $request->validate([
             'subject' => ['required'],
@@ -202,7 +213,7 @@ class TicketController extends Controller
         }else{
             $TicketID = '0001';
         }
-        $ticketNo = date('m').$TicketID;
+        $ticketNo = date('yym').$TicketID;
 
         $attPath = null;
         if($attachment != null){
@@ -415,31 +426,34 @@ class TicketController extends Controller
         ->groupBy('done_by')
         ->get();
 
-        // dd($averageTimes);
+        // Colors Array
+            $colorsArray = [
+                "169,197,160",  // Celadon
+                "255,248,240",  // Floral White
+                "158,43,37",    // Auburn
+                "171,146,191",  // African Violet
+                "115,108,237",  // Medium Slate Blue
+                "101,82,77",    // Wenge
+                "127,194,155",  // Cambridge Blue
+                "115,75,94",    // Eggplant
+                "229,220,194",  // Pearl
+                "213,87,59",    // Jasper
+                "5,142,63",     // Forest Green
+                "63,124,172",   // Steel BLue
+                "248,90,62",    // Tomato
+                "225,230,225",  // Platinum
+                "242,95,92",    // Bittersweet
+                "255,87,159",   // Brilliant Rose
+            ];
+        // Colors Array
 
-        $colorsArray = [
-            "169,197,160",  // Celadon
-            "255,248,240",  // Floral White
-            "158,43,37",    // Auburn
-            "171,146,191",  // African Violet
-            "115,108,237",  // Medium Slate Blue
-            "101,82,77",    // Wenge
-            "127,194,155",  // Cambridge Blue
-            "115,75,94",    // Eggplant
-            "229,220,194",  // Pearl
-            "213,87,59",    // Jasper
-            "5,142,63",     // Forest Green
-            "63,124,172",   // Steel BLue
-            "248,90,62",    // Tomato
-            "225,230,225",  // Platinum
-            "242,95,92",    // Bittersweet
-            "255,87,159",   // Brilliant Rose
-        ];
-        $usersInCharge = [];
-        $usersColor = [];
-        $usersBorderColor = [];
-        $avgResponseTime = [];
-        $avgResolutionTime = [];
+        // Array Variables
+            $usersInCharge = [];
+            $usersColor = [];
+            $usersBorderColor = [];
+            $avgResponseTime = [];
+            $avgResolutionTime = [];
+        // Array Variables
         
         foreach ($users as $index => $user) {
             $usersInCharge[] = $user->name;
@@ -548,7 +562,6 @@ class TicketController extends Controller
         // Create DatePeriod object
         $interval = new DateInterval('P1D'); // 1 Day interval
         $period = new DatePeriod($start, $interval, $end->addDay());
-
         $dates = [];
 
         // Loop through the DatePeriod object and format each date
