@@ -96,7 +96,7 @@ class TicketController extends Controller
             }else{
                 $TicketID = '0001';
             }
-            $ticketNo = date('m').$TicketID;
+            $ticketNo = date('yym').$TicketID;
         // Generate Ticket Number
 
         // Attachment
