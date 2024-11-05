@@ -662,7 +662,7 @@
 
             // Modal Display
                 $('#ticketID').val(id);
-                $('#ticketNumber').html(ticket_no);
+                $('#ticketNumber').html(ticket_no); 
                 $('.aticketNumber').html(ticket_no);
                 $('#sticketNumber').html(ticket_no);
                 $('#ticketRequester').html(req);

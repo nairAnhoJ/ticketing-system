@@ -112,7 +112,7 @@
 
 
 
-                    @if (auth()->user()->role == 'admin')
+                    @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
                         <button id="ddSystemLink" data-dropdown-toggle="ddSystem"
                         class="flex items-center justify-between w-full py-2 pl-3 pr-4 font-medium md:hover:bg-transparent text-sm md:hover:text-gray-200 md:p-0 md:w-auto text-gray-400 hover:text-gray-200 focus:text-white border-b-2 border-transparent hover:border-blue-300 text-center
                             @php
