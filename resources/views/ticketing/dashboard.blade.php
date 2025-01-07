@@ -487,6 +487,8 @@
                                     $status = $ticket->status;
                                     if(strtotime($ticket->created_at) > strtotime("-1 day")){
                                         echo 'text-green-500';
+                                    }else if(strtotime($ticket->created_at) < strtotime("-1 day") && strtotime($ticket->created_at) > strtotime("-2 day")){
+                                        echo 'text-yellow-500';
                                     }else if($status == 'PENDING' || $status == 'ONGOING'){
                                         echo 'text-red-500';
                                     }
