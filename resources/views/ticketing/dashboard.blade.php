@@ -484,10 +484,11 @@
                         @foreach ($tickets as $ticket)
                             <tr class="bg-gray-800 border-gray-700 hover:bg-gray-700 cursor-pointer
                                 @php
+                                    $sla = $ticket->category->sla;
                                     $status = $ticket->status;
                                     if(strtotime($ticket->created_at) > strtotime("-1 day")){
                                         echo 'text-green-500';
-                                    }else if(strtotime($ticket->created_at) < strtotime("-1 day") && strtotime($ticket->created_at) > strtotime("-2 day")){
+                                    }else if(strtotime($ticket->created_at) < strtotime("-1 day") && strtotime($ticket->created_at) > strtotime("-".$sla." day")){
                                         echo 'text-yellow-500';
                                     }else if($status == 'PENDING' || $status == 'ONGOING'){
                                         echo 'text-red-500';
