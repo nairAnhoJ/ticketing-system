@@ -1,8 +1,8 @@
 <div align="center">
-<h1>Accountability System</h1>
+<h1>Ticketing System</h1>
 </div>
 
-The ticketing system helps track and manage user requests and issues. Users can create tickets, monitor progress, and get updates on statuses like Pending, Ongoing, or Done. It improves communication and ensures timely resolution.
+The Ticketing System helps track and manage user requests and issues. Users can create tickets, monitor progress, and get updates on statuses like Pending, Ongoing, or Done. It improves communication and ensures timely resolution.
 <br/>
 
 ## Installation
