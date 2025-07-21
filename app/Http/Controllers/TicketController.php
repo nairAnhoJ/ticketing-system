@@ -63,7 +63,7 @@ class TicketController extends Controller
             }
         // All Tickets
 
-        return view('ticketing.dashboard', compact('userDept', 'tickets', 'deptInCharge', 'deptInChargeRow'));
+        return view('ticketing.dashboard', compact('userDept', 'tickets', 'deptInCharge'));
     }
 
     public function create(){
