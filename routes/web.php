@@ -64,17 +64,18 @@ Route::get('/dashboard', function () {
     if($userDeptRow != null){
         $userDept = $userDeptRow->name;
     }
-    $deptInChargeRow = DB::table('dept_in_charges')->where('id', 1)->first();
-    if($deptInChargeRow != null){
-        $deptInCharge = $deptInChargeRow->dept_id;
-    }
+    $deptInCharge = DeptInCharge::with('department')->where('id', 1)->first();
+    // $deptInChargeRow = DB::table('dept_in_charges')->where('id', 1)->first();
+    // if($deptInChargeRow != null){
+    //     $deptInCharge = $deptInChargeRow->dept_id;
+    // }
 
     $newTickets = DB::table('tickets')
         ->where('created_at', '>=', DB::raw('DATE_SUB(NOW(), INTERVAL 1 DAY)'))
         ->whereIn('status', ['PENDING', 'ONGOING'])
         ->count();
 
-    if($userDeptID != $deptInCharge){
+    if($userDeptID != $deptInCharge->dept_id){
         $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
             ->whereIn('status', ['PENDING', 'ONGOING'])
             ->where('department', $userDeptID)
