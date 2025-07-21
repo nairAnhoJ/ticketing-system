@@ -247,7 +247,7 @@
                             @endforeach --}}
                         </td>
                         <td class="py-3 px-6 text-center whitespace-nowrap">
-                            <a data-id="{{ $category->id }}" data-name="{{ $category->name }}" class="categoryEdit mr-2 text-blue-500 cursor-pointer">EDIT</a>|<a data-id="{{ $category->id }}" data-name="{{ $category->name }}" class="btnCategoryDelete ml-2 text-red-500 cursor-pointer">DELETE</a>
+                            <a data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-incharge="{{ $category->in_charge }}" class="categoryEdit mr-2 text-blue-500 cursor-pointer">EDIT</a>|<a data-id="{{ $category->id }}" data-name="{{ $category->name }}" class="btnCategoryDelete ml-2 text-red-500 cursor-pointer">DELETE</a>
                         </td>
                     </tr>
                 @endforeach
