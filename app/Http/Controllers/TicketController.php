@@ -66,8 +66,9 @@ class TicketController extends Controller
     }
 
     public function create(){
+        $deptInCharge = DeptInCharge::with('department')->where('id', 1)->first();
         $cats = TicketCategory::with('user')->orderBy('name', 'asc')->get();
-        return view('ticketing.create', compact('cats'));
+        return view('ticketing.create', compact('cats', 'deptInCharge'));
     }
 
     public function store(Request $request){
@@ -172,10 +173,11 @@ class TicketController extends Controller
 
     public function createForIT(){
         $cats = DB::select('SELECT * FROM ticket_categories ORDER BY ticket_categories.name ASC');
+        $deptInCharge = DeptInCharge::with('department')->where('id', 1)->first();
         $dic = (DB::table('dept_in_charges')->first())->dept_id;
         $users = DB::table('users')->orderBy('name', 'asc')->get();
 
-        return view('ticketing.create-ticket', compact('cats', 'users'));
+        return view('ticketing.create-ticket', compact('cats', 'users', 'deptInCharge'));
     }
 
     public function storeForIT(Request $request){
