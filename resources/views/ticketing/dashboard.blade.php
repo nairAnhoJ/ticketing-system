@@ -78,7 +78,7 @@
 
     <div style="height: calc(100vh - 65px);" class="w-screen p-3 text-gray-200">
         <div class="flex items-center justify-between mb-1.5">
-            <h1 class="text-3xl font-extrabold leading-none tracking-wide text-blue-500">{{ $deptInChargeRow->department->name }} TICKETING</h1>
+            <h1 class="text-3xl font-extrabold leading-none tracking-wide text-blue-500">{{ $deptInCharge->department->name }} TICKETING</h1>
             
             {{-- <div class="text-white text-center text-3xl font-bold mb-5">
                 HR TICKETING SYSTEM
