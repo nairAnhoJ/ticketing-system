@@ -1,6 +1,6 @@
 <x-app-layout>
     @section('title')
-    HR Ticketing
+    {{ $deptInCharge->department->name }} Ticketing System
     @endsection
     <style>
         /* width */

@@ -3,7 +3,7 @@
     <meta http-equiv="Refresh" content="5">
     @endsection
     @section('title')
-        HR Ticketing
+        {{ $deptInCharge->department->name }} Ticketing
     @endsection
     <style>
         /* width */

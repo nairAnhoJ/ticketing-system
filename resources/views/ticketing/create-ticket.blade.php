@@ -1,6 +1,6 @@
 <x-app-layout>
     @section('title')
-    HII - Ticketing System
+    {{ $deptInCharge->department->name }} Ticketing System
     @endsection
     <style>
         /* width */
