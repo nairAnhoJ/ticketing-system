@@ -36,14 +36,15 @@ class TicketController extends Controller
         // User Department
         
         // Department In-charge ID
-            $deptInChargeRow = DeptInCharge::with('department')->where('id', 1)->first();
-            if($deptInChargeRow != null){
-                $deptInCharge = $deptInChargeRow->dept_id;
-            }
+            $deptInCharge = DeptInCharge::with('department')->where('id', 1)->first();
+            // $deptInChargeRow = DeptInCharge::with('department')->where('id', 1)->first();
+            // if($deptInChargeRow != null){
+            //     $deptInCharge = $deptInChargeRow->dept_id;
+            // }
         // Department In-charge ID
 
         // All Tickets
-            if($userDeptID != $deptInCharge){
+            if($userDeptID != $deptInCharge->dept_id){
                 $tickets = Ticket::with('requestor', 'departmentRow', 'category', 'assigned')
                     ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
                     ->where('department', $userDeptID)
