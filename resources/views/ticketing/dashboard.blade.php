@@ -84,7 +84,7 @@
                 HR TICKETING SYSTEM
             </div> --}}
 
-            @if (auth()->user()->dept_id == $deptInCharge)
+            @if (auth()->user()->dept_id == $deptInCharge->dept_id)
                 <a href="{{ route('ticket.reports') }}" type="button" class="justify-self-end w-48 text-white text-center focus:ring-4 font-medium rounded-lg text-sm px-5 py-1.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Ticket Report</a>
             @else
                 <div class="w-48"></div>
@@ -149,7 +149,7 @@
                                         <button id="updateButton" type="button" data-modal-toggle="ticketModal" type="button" class="focus:outline-none text-neutral-800 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 border border-yellow-500 bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-900">Update Ticket</button>
                                     </div>
                                 </div>
-                                @if (auth()->user()->dept_id == $deptInCharge)
+                                @if (auth()->user()->dept_id == $deptInCharge->dept_id)
                                     <div id="ticketResolutionInputDiv">
                                         <label class="block mt-5 mb-2 text-base font-medium text-white">
                                             Resolution <span class="text-red-500 text-sm">*Required upon completion</span>
@@ -171,7 +171,7 @@
                             </div>
                         <!-- Modal footer -->
                         <div class="flex items-center p-3 border-t border-gray-600 rounded-b">
-                            @if (auth()->user()->dept_id == $deptInCharge)
+                            @if (auth()->user()->dept_id == $deptInCharge->dept_id)
                                 <button data-modal-toggle="ticketModal" type="submit" id="ticketButton" class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 mr-3 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"></button>
                             @endif
                             <div id="cancelButtonDiv">
@@ -413,7 +413,7 @@
             <div class="grid h-10 grid-cols-3 mb-0">
                 <div class="h-8 col-span-2">
                     {{-- @if ($userDept != 'IT') --}}
-                    @if (auth()->user()->dept_id != $deptInCharge)
+                    @if (auth()->user()->dept_id != $deptInCharge->dept_id)
                         <a href="{{ route('ticket.create') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Create Ticket</a>
                         {{-- <a href="{{ route('sap.index') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">SAP BP</a> --}}
                     @else
@@ -470,7 +470,7 @@
                             <th scope="col" class="sticky top-0 py-2 text-center">
                                 DATE/TIME CREATED
                             </th>
-                            @if (auth()->user()->dept_id == $deptInCharge)
+                            @if (auth()->user()->dept_id == $deptInCharge->dept_id)
                                 <th scope="col" class="sticky top-0 py-2 text-center whitespace-nowrap">
                                     ELAPSED TIME
                                 </th>
@@ -557,7 +557,7 @@
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
                                     {{ date("M d, Y h:i A", strtotime($ticket->created_at)) }}
                                 </td>
-                                @if (auth()->user()->dept_id == $deptInCharge)
+                                @if (auth()->user()->dept_id == $deptInCharge->dept_id)
                                     <td class="px-6 py-3 text-center whitespace-nowrap">
                                         @if ($status == 'ONGOING' || $status == 'PENDING' || $status == 'DONE')
                                             @php
