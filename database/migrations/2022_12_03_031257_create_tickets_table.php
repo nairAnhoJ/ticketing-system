@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('status', 10)->default('PENDING');
             $table->bigInteger('done_by')->nullable();
             $table->dateTime('start_date_time')->nullable();
+            $table->dateTime('ongoing_date_time')->nullable();
             $table->dateTime('end_date_time')->nullable();
             $table->string('resolution_attachment', 100)->nullable();
 

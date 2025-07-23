@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->bigInteger('in_charge')->nullable();
+            $table->tinyInteger('sla')->default(2);
             $table->timestamps();
         });
     }

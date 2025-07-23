@@ -605,7 +605,7 @@
     $(document).ready(function(){
         var myID = {{ auth()->user()->id }};
         var myDept = {{ auth()->user()->dept_id }};
-        var deptInCharge = {{ $deptInCharge }};
+        var deptInCharge = {{ $deptInCharge->dept_id }};
         var resolution_attachment = '';
         var resolution_file_extension = '';
         
