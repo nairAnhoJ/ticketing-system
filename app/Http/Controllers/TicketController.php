@@ -306,7 +306,6 @@ class TicketController extends Controller
                         }
                     }
                 // SMTP
-                
             }
 
         }else if($status == 'ONGOING'){
@@ -389,8 +388,9 @@ class TicketController extends Controller
     }
 
     public function report(){
-        $deptInCharge = (DB::table('dept_in_charges')->where('id', 1)->first())->dept_id;
-        $users = DB::select('SELECT * FROM users WHERE dept_id = ? AND id != ?', [$deptInCharge, 1]);
+        $deptInCharge = DeptInCharge::with('department')->where('id', 1)->first();
+        // $deptInCharge = (DB::table('dept_in_charges')->where('id', 1)->first())->dept_id;
+        $users = DB::select('SELECT * FROM users WHERE dept_id = ? AND id != ?', [$deptInCharge->dept_id, 1]);
         $cats = DB::table('ticket_categories')->orderBy('name', 'desc')->get();
 
         $inputDateFrom = date('m/d/Y');
