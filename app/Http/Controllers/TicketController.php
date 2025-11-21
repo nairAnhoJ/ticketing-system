@@ -537,7 +537,7 @@ class TicketController extends Controller
     public function genReport(Request $request){
         $deptInCharge = DeptInCharge::with('department')->where('id', 1)->first();
         // $deptInCharge = (DB::table('dept_in_charges')->with('department')->where('id', 1)->first())->dept_id;
-        $users = User::where('dept_id', $deptInCharge->id)->where('id', '!=', 1)->orderBy('name', 'asc')->get();
+        $users = User::where('dept_id', $deptInCharge->dept_id)->where('id', '!=', 1)->orderBy('name', 'asc')->get();
         // $users = DB::select('SELECT * FROM users WHERE dept_id = ? AND id != ?', [$deptInCharge, 1]);
         $cats = DB::table('ticket_categories')->orderBy('name', 'desc')->get();
 
