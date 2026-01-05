@@ -68,7 +68,7 @@ class TicketController extends Controller
 
     public function create(){
         $deptInCharge = DeptInCharge::with('department')->where('id', 1)->first();
-        $cats = TicketCategory::with('user')->orderBy('name', 'asc')->get();
+        $cats = TicketCategory::with('user')->where('is_deleted', 0)->orderBy('name', 'asc')->get();
         return view('ticketing.create', compact('cats', 'deptInCharge'));
     }
 
