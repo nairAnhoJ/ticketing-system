@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\DB;
 class TicketCategoryController extends Controller
 {
     public function index(){
-        $inCharge = DB::table('dept_in_charges')->where('is_deleted', 0)->first();
+        $inCharge = DB::table('dept_in_charges')->first();
         $deptInCharge = $inCharge->dept_id;
-        $categories = TicketCategory::with('user')->get();
+        $categories = TicketCategory::with('user')->where('is_deleted', 0)->get();
         $dics = DB::table('users')->where('dept_id', $deptInCharge)->orderBy('name', 'asc')->get();
         $depts = DB::table('departments')->orderBy('name', 'asc')->get();
 
