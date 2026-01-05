@@ -50,9 +50,13 @@ class TicketCategoryController extends Controller
     }
 
     public function delete(Request $request){
-        $cat_id = $request->id;
+        $id = $request->id;
 
-        DB::delete('delete FROM ticket_categories where id = ?', [$cat_id]);
+        $ticketCategory = TicketCategory::where('id', $id)->first();
+        $ticketCategory->is_deleted = 1;
+        $ticketCategory->save();
+
+        // DB::delete('delete FROM ticket_categories where id = ?', [$cat_id]);
 
         return redirect()->back();
     }
