@@ -303,7 +303,9 @@
                             {{ $user->phone }}
                         </td>
                         <td class="py-3 px-6 text-center whitespace-nowrap">
-                            <a data-id="{{ $user->id }}" class="userEdit mr-2 text-blue-500 cursor-pointer">EDIT</a>|<a data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-modal-toggle="resetModal" class="btnUserReset mx-2 text-orange-500 cursor-pointer">RESET</a>|<a data-id="{{ $user->id }}" data-name="{{ $user->name }}" class="btnUserDelete ml-2 text-red-500 cursor-pointer">DELETE</a>
+                            <a data-id="{{ $user->id }}" class="userEdit mr-2 text-blue-500 cursor-pointer">EDIT</a>
+                            |<a data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-modal-toggle="resetModal" class="btnUserReset mx-2 text-orange-500 cursor-pointer">RESET</a>
+                            <!-- |<a data-id="{{ $user->id }}" data-name="{{ $user->name }}" class="btnUserDelete ml-2 text-red-500 cursor-pointer">DELETE</a> -->
                         </td>
                     </tr>
                 @endforeach
