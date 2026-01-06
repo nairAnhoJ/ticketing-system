@@ -13,7 +13,7 @@ class UserController extends Controller
     public function index(){
         $depts = DB::table('departments')->orderBy('name', 'asc')->where('id','!=','1')->get();
         $
-        $users = DB::select('SELECT users.id, users.id_no, users.name, departments.name AS dept, users.email, users.phone FROM users INNER JOIN departments ON users.dept_id = departments.id WHERE users.id != "1" AND users.is_deleted == "0" ORDER BY users.name ASC');
+        $users = DB::select('SELECT users.id, users.id_no, users.name, departments.name AS dept, users.email, users.phone FROM users INNER JOIN departments ON users.dept_id = departments.id WHERE users.id != "1" AND users.is_deleted = 0 ORDER BY users.name ASC');
         return view('admin.system-management.user', compact('users', 'depts'));
     }
 

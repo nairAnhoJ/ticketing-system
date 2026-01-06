@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->bigInteger('in_charge')->nullable();
             $table->tinyInteger('sla')->default(2);
+            $table->text('remarks')->nullable();
+            $table->boolean('is_deleted')->default(0);
             $table->timestamps();
         });
     }
