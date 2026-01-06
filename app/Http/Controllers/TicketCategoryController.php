@@ -24,9 +24,11 @@ class TicketCategoryController extends Controller
         ]);
 
         $name = strtoupper($request->name);
+        $remarks = $request->remarks;
 
         $cat = new TicketCategory();
         $cat->name = $name;
+        $cat->remarks = $remarks;
         $cat->in_charge = $request->inchargeUser;
         $cat->save();
 

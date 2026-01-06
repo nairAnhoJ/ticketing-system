@@ -80,6 +80,11 @@
                                 <input type="text" id="categoryName" name="name" autocomplete="off" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
                             </div>
                             <div>
+                                <label for="remarks" class="block mb-2 text-sm font-medium text-white">Remarks</label>
+                                <textarea id="remarks" name="remarks" autocomplete="off" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                <!-- <input type="text" id="remarks" name="remarks" autocomplete="off" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"> -->
+                            </div>
+                            <div>
                                 <label for="inchargeUser" class="block mb-2 text-sm font-medium text-white">In-Charge</label>
                                 <select id="inchargeUser" name="inchargeUser" class="border text-sm rounded-lg block w-full py-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
                                     @foreach ($dics as $dic)
