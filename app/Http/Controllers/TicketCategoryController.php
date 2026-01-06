@@ -42,9 +42,11 @@ class TicketCategoryController extends Controller
 
         $cat_id = $request->id;
         $cat_name = strtoupper($request->name);
+        $remarks = $request->remarks;
 
         $cat = TicketCategory::where('id', $cat_id)->first();
         $cat->name = $cat_name;
+        $cat->remarks = $remarks;
         $cat->in_charge = $request->inchargeUser;
         $cat->save();
 

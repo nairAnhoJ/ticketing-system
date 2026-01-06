@@ -81,7 +81,7 @@
                             </div>
                             <div>
                                 <label for="remarks" class="block mb-2 text-sm font-medium text-white">Remarks</label>
-                                <textarea id="remarks" name="remarks" autocomplete="off" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                <textarea id="remarks" name="remarks" autocomplete="off" class="border text-sm rounded-lg block w-full h-32 p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 resize-none"></textarea>
                                 <!-- <input type="text" id="remarks" name="remarks" autocomplete="off" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"> -->
                             </div>
                             <div>
@@ -252,7 +252,7 @@
                             @endforeach --}}
                         </td>
                         <td class="py-3 px-6 text-center whitespace-nowrap">
-                            <a data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-incharge="{{ $category->in_charge }}" class="categoryEdit mr-2 text-blue-500 cursor-pointer">EDIT</a>
+                            <a data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-remarks="{{ $category->remarks }}" data-incharge="{{ $category->in_charge }}" class="categoryEdit mr-2 text-blue-500 cursor-pointer">EDIT</a>
                             |<a data-id="{{ $category->id }}" data-name="{{ $category->name }}" class="btnCategoryDelete ml-2 text-red-500 cursor-pointer">DELETE</a>
                         </td>
                     </tr>
@@ -284,6 +284,7 @@
         $('.categoryEdit').click(function(){
             var id = $(this).data('id');
             var name = $(this).data('name');
+            var remarks = $(this).data('remarks');
             var incharge = $(this).data('incharge');
             var action = "{{ route('category.edit') }}";
 
@@ -291,6 +292,7 @@
             $('#modalTitle').html('EDIT');
             $('#inchargeUser').val(incharge);
             $('#categoryName').val(name);
+            $('#remarks').val(remarks);
             $('#categoryId').val(id);
             $('#categoryAddEdit').click();
         });
