@@ -35,9 +35,10 @@
             <select required id="nature" name="nature" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">
                 @foreach ($cats as $cat)
                     <option hidden value=""></option>
-                    <option value="{{$cat->id}}" data-incharge="{{ $cat->user->name }}" data-incharge_id="{{ $cat->in_charge }}">{{$cat->name}}</option>
+                    <option value="{{$cat->id}}" data-incharge="{{ $cat->user->name }}" data-remarks="{{ $cat->remarks }}" data-incharge_id="{{ $cat->in_charge }}">{{$cat->name}}</option>
                 @endforeach
             </select>
+            <textarea id="categoryRemarks" class="p-0 pt-1.5 text-sm w-full hidden overflow-hidden bg-transparent border-0 resize-none"></textarea>
 
             <div class="mt-5">
                 <label for="subject" class="block text-sm font-medium text-white">In-Charge</label>
@@ -79,13 +80,27 @@
                     $('#viewAttachment').prop("disabled", false);
                 }
             });
+            
+            function autoResize(el) {
+                el.style.height = "auto";
+                el.style.height = el.scrollHeight + "px";
+            }
 
             $('#nature').change(function(){
                 var incharge = $(this).find('option:selected').data('incharge');
                 var incharge_id = $(this).find('option:selected').data('incharge_id');
+                var remarks = $(this).find('option:selected').data('remarks');
+                console.log(remarks)
                 $('#ticketInChargeDisplay').html(incharge);
                 $('#in_charge').val(incharge_id);
                 $('#ticketInCharge').html(incharge);
+                if(remarks != '' && remarks != null){
+                    $('#categoryRemarks').val(remarks);
+                    $('#categoryRemarks').removeClass('hidden');
+                    $('#categoryRemarks').height(0).height($('#categoryRemarks')[0].scrollHeight);
+                }else{
+                    $('#categoryRemarks').addClass('hidden');
+                }
             });
         });
     </script>
