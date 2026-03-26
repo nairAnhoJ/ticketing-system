@@ -58,7 +58,7 @@ class TicketController extends Controller
                     ->whereIn('status', ['PENDING', 'ONGOING', 'DONE'])
                     ->orderBy('status', 'desc')
                     ->orderBy('id', 'desc')
-                    ->limit(50)
+                    ->limit(200)
                     ->get();
             }
         // All Tickets
