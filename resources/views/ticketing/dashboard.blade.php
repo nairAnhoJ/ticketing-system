@@ -411,13 +411,26 @@
 
         {{-- CONTROLS --}}
             <div class="grid h-10 grid-cols-3 mb-0">
-                <div class="h-8 col-span-2">
+                <!-- <div class="h-8 col-span-2">
                     {{-- @if ($userDept != 'IT') --}}
                     @if (auth()->user()->dept_id != $deptInCharge->dept_id)
                         <a href="{{ route('ticket.create') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Create Ticket</a>
                         {{-- <a href="{{ route('sap.index') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">SAP BP</a> --}}
                     @else
                         {{-- <a href="{{ route('ticket.createForIT') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Create Ticket</a> --}}
+                    @endif
+                </div> -->
+                <div class="h-8 col-span-2">
+                    {{-- @if ($userDept != 'IT') --}}
+                    @if (auth()->user()->dept_id != $deptInCharge)
+                        @php
+                            $host = explode(':', $_SERVER['HTTP_HOST'])[0];
+                        @endphp
+                        <a href="http://{{ $host }}:1111" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Create Ticket</a>
+                        <!-- <a href="{{ route('ticket.create') }}" target type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Create Ticket</a>
+                        <a href="{{ route('sap.index') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">SAP BP</a> -->
+                    @else
+                        <!-- <a href="{{ route('ticket.createForIT') }}" type="button" class="w-40 mb-2 mr-2 text-sm font-medium leading-8 text-center text-white bg-blue-600 rounded-lg focus:ring-4 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Create Ticket</a> -->
                     @endif
                 </div>
                 <div class="flex h-8">
